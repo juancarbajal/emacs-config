@@ -1,10 +1,10 @@
-(setq org-agenda-files (list "C:/Users/jcarbajal/Google Drive/gtd.org")) 
+(setq org-agenda-files (list "~/Google Drive/gtd.org")) 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files (quote ("C:/Users/jcarbajal/Google Drive/gtd.org")))
+ '(org-agenda-files (quote ("~/Google Drive/gtd.org")))
  '(package-selected-packages
    (quote
 	(json-mode feature-mode yaml-mode org-vcard cyberpunk-theme markdown-mode magit)))
@@ -288,7 +288,7 @@
 									(org-timer-set-timer '(16))))) 
 (defun gtd ()
   (interactive)
-  (find-file "C:/Users/jcarbajal/Google Drive/gtd.org")
+  (find-file "~/Google Drive/gtd.org")
   )
 (setq org-src-fontify-natively t)
 (setq org-src-tab-acts-natively t)
