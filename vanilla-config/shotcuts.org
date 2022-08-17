@@ -4,6 +4,8 @@
 C-h f : Help about a function 
 C-h m : Show commands in the buffer 
 M-x describe-variable : Describe a variable 
+C-h k : Show function of a key combination
+
 
 
 * Move
@@ -18,8 +20,8 @@ C-b : Prev C-haracter
 M-{ : Next paragraph
 M-} : Prev paragraph
 
-C-v : Prev page 
-M-v : Next page 
+C-v : Next page 
+M-v : Prev page 
 
 * Textos
 
@@ -48,7 +50,11 @@ C-x r b bookmark RET : Jump a bookmark
 
 C-x r m bookmark RET : Move a bookmark at point 
 
-M-x bookmark-save : Save the bookmark file 
+M-x bookmark-save : Save the bookmark file
+
+* Projects (projectile)
+C-c p f : Search file in a project
+
 
 * Programming 
 
@@ -61,7 +67,53 @@ https://github.com/pierre-lecocq/emacs4developers/blob/master/chapters/02-the-ba
 
 * treemacs
 
-C-c C-p a : Add folder to projects 
+C-c C-p a : Add folder to projects
+
+* Folding 
+hs-minor mode
+C-c @ C-h : Hide block 
+C-c @ C-s : Show block 
+C-c @ C-M-h : Hide all 
+
+* Dired 
+
+C-x d : Dired
+
+^ : Up a level 
+C-M-p : Prev subdir 
+C-M-n : Next subdir 
+C-M-u : Up in tree 
+C-M-d : Down in tree 
+g : Goto file 
+
+
+m : Mark file 
+u : Unmark file 
+t : toogle Mark folder 
+g : Revert buffer
+
+:e : Encrypt
+:d : Descript 
+
+
+i : (dired subtree) go to sub tree in same buffer 
+C-o : Display file 
+! : Shell command 
++ : Create directory 
+= : diff 
+
+A : search regexp in file 
+B : byte compile file 
+C : Copy 
+D : Delete 
+G : Change group 
+M : chmod
+P : Print
+Q : Replace regex
+R : Rename file 
+Z : Compress file 
+
+
 * Magit 
 M-x magit : Magit mode 
 c : commit 
@@ -69,12 +121,15 @@ C-c C-c : Save comment of commit and send
 P u : Push corrent branch 
 P p : Push and change other branch 
 
+F u : Pull
+
 b b : Change branch 
 b l : List of branches
 
 m m : merge with other branch 
 
 g : Refresh Magit 
+
 
 * Git timemachine 
 p: prev commit
@@ -88,3 +143,43 @@ b: run magit-blame if magit is available
 c: show current commit if magit is available 
 * Commands 
 C-x M-: : Repeat last command 
+* Tide 
+M-. : Buscar definición de función o variable 
+
+* Counsel + Ivy 
+
+(global-set-key (kbd "C-s") 'swiper-isearch)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "M-y") 'counsel-yank-pop)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+(global-set-key (kbd "<f1> l") 'counsel-find-library)
+(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+(global-set-key (kbd "<f2> j") 'counsel-set-variable)
+(global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+(global-set-key (kbd "C-c v") 'ivy-push-view)
+(global-set-key (kbd "C-c V") 'ivy-pop-view)
+Ivy-based interface to shell and system tools
+(global-set-key (kbd "C-c c") 'counsel-compile)
+(global-set-key (kbd "C-c g") 'counsel-git)
+(global-set-key (kbd "C-c j") 'counsel-git-grep)
+(global-set-key (kbd "C-c L") 'counsel-git-log)
+(global-set-key (kbd "C-c k") 'counsel-rg)
+(global-set-key (kbd "C-c m") 'counsel-linux-app)
+(global-set-key (kbd "C-c n") 'counsel-fzf)
+(global-set-key (kbd "C-x l") 'counsel-locate)
+(global-set-key (kbd "C-c J") 'counsel-file-jump)
+(global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+(global-set-key (kbd "C-c w") 'counsel-wmctrl)
+Ivy-resume and other commands
+ivy-resume resumes the last Ivy-based completion.
+
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(global-set-key (kbd "C-c b") 'counsel-bookmark)
+(global-set-key (kbd "C-c d") 'counsel-descbinds)
+(global-set-key (kbd "C-c g") 'counsel-git)
+(global-set-key (kbd "C-c o") 'counsel-outline)
+(global-set-key (kbd "C-c t") 'counsel-load-theme)
+(global-set-key (kbd "C-c F") 'counsel-org-file) 
