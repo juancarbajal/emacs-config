@@ -31,6 +31,7 @@
 
 ;; (when (version<= "26.0.50" emacs-version )
 (global-display-line-numbers-mode)
+(set-frame-font "Hack 10" nil t)
 
 
 (setq bookmark-default-file "~/.emacs.d/saves/bookmarks.bmk" bookmark-save-flag 1)
@@ -91,7 +92,7 @@
 						 (package-install 'magit)
 						 (package-install 'lsp-mode)
 						 (package-install 'lsp-ui)
-						 (package-install 'lsp-ivy)
+						 ;; (package-install 'lsp-ivy)
 						 (package-install 'dap-mode)
 						 (package-install 'flycheck)
 						 (package-install 'projectile)
@@ -105,8 +106,8 @@
 						 (package-install 'dockerfile-mode)
 						 (package-install 'dotenv-mode)
 						 (package-install 'slime)
-						 (package-install 'ivy)
-						 (package-install 'ivy-prescient)
+						 ;; (package-install 'ivy)
+						 ;; (package-install 'ivy-prescient)
 						 (package-install 'counsel)
 						 (package-install 'swiper)
 						 (package-install 'counsel-projectile)
@@ -123,10 +124,13 @@
 						 ;; (package-install 'treemacs-projectile)
 						 (package-install 'treemacs-icons-dired)
 						 (package-install 'elpy)
+						 
 						 (package-install 'solidity-mode)
 						 (package-install 'company-solidity)
 						 (package-install 'solidity-flycheck)
+
 						 (package-install 'csharp-mode)
+						 (package-install 'dracula-theme)
 						 
 						 (package-inatall 'go-mode)
 						 (package-install 'go-snippets)
@@ -139,12 +143,54 @@
 						 ))
 	)
 
+
+(require 'yasnippet)
+(yas-global-mode 1)
+
+;; Auto completion
+(use-package company
+  :config
+  (setq company-idle-delay 0
+        company-minimum-prefix-length 4
+        company-selection-wrap-around t))
+(global-company-mode)
+(require 'company-box)
+(add-hook 'company-mode-hook 'company-box-mode)
+
+
+;; (use-package helm-config)
+(require 'helm)
+(use-package helm
+	:init
+	(helm-mode 1)
+	:config
+	(require 'helm-config)
+	(setq	helm-split-window-in-side-p t 
+				helm-move-to-line-cycle-in-source t
+				)
+	(global-set-key (kbd "M-x") 'helm-M-x)
+	(global-set-key (kbd "M-x") 'helm-M-x)
+	(global-set-key (kbd "C-x r b") 'helm-filtered-bookmarks)
+	(global-set-key (kbd "C-x C-f") 'helm-find-files)
+	(global-set-key (kbd "C-x b") 'helm-mini)
+	(global-set-key (kbd "C-x C-r") 'helm-recentf)
+	(global-set-key (kbd "C-c i") 'helm-imenu)
+	(global-set-key (kbd "C-s") 'helm-occur)
+	(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+	(define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+	(define-key helm-map (kbd "C-z") 'helm-select-action))
 ;;paren
+;; (Use-Package Paren
+;; 	:Init
+;; 	(show-paren-mode 1)
+;; 	:config(setq show-paren-style 'expression)
+;; 	:custom-face(show-paren-match ((t(:background "red" :foreground "white")))))
+
 (use-package paren
 	:init
 	(show-paren-mode 1)
-	:config(setq show-paren-style 'expression)
-	:custom-face(show-paren-match ((t(:background "red" :foreground "white")))))
+	:config(setq show-paren-style 'expression))
 
 (use-package elec-pair
 	:hook ((prog-mode org-mode) . electric-pair-mode)
@@ -191,6 +237,7 @@
        (typescript-mode . lsp)
        (lsp-mode . lsp-enable-which-key-integration)
        (dart-mode-hook . lsp)
+			 (python-mode .lsp)
        )
 :commands lsp)
 (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
@@ -209,11 +256,18 @@
 
 
 (use-package lsp-ui :commands lsp-ui-mode)
-(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+
+;; (use-package which-key
+;;     :config
+;;     (which-key-mode))
+
 (use-package which-key
     :config
-    (which-key-mode))
-
+    (which-key-mode)
+    (setq which-key-idle-delay 0.5
+          which-key-idle-secondary-delay 0.5)
+    (which-key-setup-side-window-bottom))
 
 (use-package flycheck
   :ensure t
@@ -226,6 +280,12 @@
 ;; (slime-setup '(slime-fancy))
 ;; (define-key global-map (kbd "<f12>") 'slime-selector)
 ;; (slime)
+
+;;Debugging
+(setq dap-auto-configure-features '(sessions locals controls tooltip))
+(require 'dap-dlv-go)
+;; (require 'dap-chrome)
+(require 'dap-edge)
 
 
 ;;Javascript
@@ -260,8 +320,6 @@
 
 
 
-(require 'yasnippet)
-(yas-global-mode 1)
 
 ;; (add-hook 'after-init-hook 'global-company-mode)
 ;; (add-hook 'php-mode-hook 'company-php)
@@ -270,9 +328,11 @@
 ;;Python
 ;; (elpy-enable)
 ;; (add-hook 'python-hook 'company-anaconda)
+;; (use-package python-mode
+;; 	:ensure nil
+;; 	:custom
+;; 	(python-shell-interpreter "python"))
 
-(require 'company-box)
-(add-hook 'company-mode-hook 'company-box-mode)
 
 ;; Org mode
 (org-babel-do-load-languages
@@ -321,48 +381,46 @@
 (setq projectile-enable-caching t)
 
 ;;Ivy
-(setq ivy-use-virtual-buffers t)
 (setq enable-recursive-minibuffers t)
-(setq ivy-count-format "(%d/%d) ")
-(setq projectile-completion-system 'ivy)
-(ivy-mode 1)
-(ivy-prescient-mode 1)
-(setq ivy-use-virtual-buffers t)
-(setq ivy-count-format "(%d/%d) ")
-(setq ivy-use-selectable-prompt t)
-(global-set-key (kbd "C-s") 'swiper-isearch)
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "M-y") 'counsel-yank-pop)
-(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-(global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
-(global-set-key (kbd "<f1> l") 'counsel-find-library)
-(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-(global-set-key (kbd "<f2> j") 'counsel-set-variable)
-(global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-(global-set-key (kbd "C-c v") 'ivy-push-view)
-(global-set-key (kbd "C-c V") 'ivy-pop-view)
-(global-set-key (kbd "C-c c") 'counsel-compile)
-(global-set-key (kbd "C-c g") 'counsel-git)
-(global-set-key (kbd "C-c j") 'counsel-git-grep)
-(global-set-key (kbd "C-c L") 'counsel-git-log)
-(global-set-key (kbd "C-c k") 'counsel-rg)
-(global-set-key (kbd "C-c m") 'counsel-linux-app)
-(global-set-key (kbd "C-c n") 'counsel-fzf)
-(global-set-key (kbd "C-x l") 'counsel-locate)
-(global-set-key (kbd "C-c J") 'counsel-file-jump)
-;;(global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-;;(global-set-key (kbd "C-c w") 'counsel-wmctrl)
-(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
-(global-set-key (kbd "C-c b") 'counsel-bookmark)
-(global-set-key (kbd "C-c d") 'counsel-descbinds)
-(global-set-key (kbd "C-c g") 'counsel-git)
-(global-set-key (kbd "C-c o") 'counsel-outline)
-(global-set-key (kbd "C-c t") 'counsel-load-theme)
-(global-set-key (kbd "C-c F") 'counsel-org-file)
+;; (setq ivy-use-virtual-buffers t)
+;; (setq ivy-count-format "(%d/%d) ")
+;; (setq projectile-completion-system 'ivy)
+;; (ivy-mode 1)
+;; (ivy-prescient-mode 1)
+;; (setq ivy-use-virtual-buffers t)
+;; (setq ivy-count-format "(%d/%d) ")
+;; (setq ivy-use-selectable-prompt t)
+;; (global-set-key (kbd "C-s") 'swiper-isearch)
+;; (global-set-key (kbd "M-x") 'counsel-M-x)
+;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+;; (global-set-key (kbd "M-y") 'counsel-yank-pop)
+;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+;; (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
+;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+;; (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+;; (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+;; (global-set-key (kbd "C-c v") 'ivy-push-view)
+;; (global-set-key (kbd "C-c V") 'ivy-pop-view)
+;; (global-set-key (kbd "C-c c") 'counsel-compile)
+;; (global-set-key (kbd "C-c g") 'counsel-git)
+;; (global-set-key (kbd "C-c j") 'counsel-git-grep)
+;; (global-set-key (kbd "C-c L") 'counsel-git-log)
+;; (global-set-key (kbd "C-c k") 'counsel-rg)
+;; (global-set-key (kbd "C-c m") 'counsel-linux-app)
+;; (global-set-key (kbd "C-c n") 'counsel-fzf)
+;; (global-set-key (kbd "C-x l") 'counsel-locate)
+;; (global-set-key (kbd "C-c J") 'counsel-file-jump)
+;; (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+;; (global-set-key (kbd "C-c C-r") 'ivy-resume)
+;; (global-set-key (kbd "C-c b") 'counsel-bookmark)
+;; (global-set-key (kbd "C-c d") 'counsel-descbinds)
+;; (global-set-key (kbd "C-c g") 'counsel-git)
+;; (global-set-key (kbd "C-c o") 'counsel-outline)
+;; (global-set-key (kbd "C-c t") 'counsel-load-theme)
+;; (global-set-key (kbd "C-c F") 'counsel-org-file)
 
 
 
@@ -388,11 +446,11 @@
 ;;Keys
 (global-set-key [f5] 'revert-buffer)
 (global-set-key [f12] 'indent-buffer)
-(global-set-key [f3] 'projectile-find-file)
-(global-set-key [f2] 'eshell)
 (global-set-key [f6] 'indent-region)
+(global-set-key (kbd "C-c C-x") 'eval-region)
 
-(load-theme 'misterioso t) ;;misterioso, manoj-dark  leuven
+
+(load-theme 'dracula t) ;;misterioso, manoj-dark  leuven
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -400,7 +458,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-	 '("63b2616880ed3fc55a75a6c074f20b4623a6df79be4973ec8ed8e0a0a354d570" "78e6be576f4a526d212d5f9a8798e5706990216e9be10174e3f3b015b8662e27" "a3e99dbdaa138996bb0c9c806bc3c3c6b4fd61d6973b946d750b555af8b7555b" default))
+	 '("a556e4e6fc62469cd28a57c3b5386807d676a33176659f849fc53fa8763f5955" "63b2616880ed3fc55a75a6c074f20b4623a6df79be4973ec8ed8e0a0a354d570" "78e6be576f4a526d212d5f9a8798e5706990216e9be10174e3f3b015b8662e27" "a3e99dbdaa138996bb0c9c806bc3c3c6b4fd61d6973b946d750b555af8b7555b" default))
  '(ignored-local-variable-values
 	 '((eval setq lsp-clients-angular-language-server-command
 					 (let
@@ -411,13 +469,15 @@
 							 "--tsProbeLocations" ,(concat curr-proj-root "node_modules")
 							 "--stdio")))))
  '(package-selected-packages
-	 '(panda-theme spacemacs-theme prettier-js tide rjsx-mode ob-php ob-sql-mode ob-sql ob-go go-snippet angular-snippets angular-mode go-mode markdown-preview-mode multi-web-mode zen-mode zenburn-theme lsp-dart solidity-mode treemacs-icons-dired lsp-treemacs with-editor swiper counsel ivy yasnippet-classic-snippets yasnippet-snippets company projectile flycheck dap-mode lsp-mode magit yaml-mode which-key use-package typescript-mode swift3-mode swift-playground-mode swift-mode sr-speedbar solidity-flycheck slime powershell php-mode ob-powershell monokai-theme lsp-ui lsp-ivy ivy-prescient elpygen elpy dotenv-mode dockerfile-mode dart-mode csharp-mode counsel-projectile company-solidity company-box))
+	 '(helm dracula-theme panda-theme spacemacs-theme prettier-js tide rjsx-mode ob-php ob-sql-mode ob-sql ob-go go-snippet angular-snippets angular-mode go-mode markdown-preview-mode multi-web-mode zen-mode zenburn-theme lsp-dart solidity-mode treemacs-icons-dired lsp-treemacs with-editor swiper counsel ivy yasnippet-classic-snippets yasnippet-snippets company projectile flycheck dap-mode lsp-mode magit yaml-mode which-key use-package typescript-mode swift3-mode swift-playground-mode swift-mode sr-speedbar solidity-flycheck slime powershell php-mode ob-powershell monokai-theme lsp-ui lsp-ivy ivy-prescient elpygen elpy dotenv-mode dockerfile-mode dart-mode csharp-mode counsel-projectile company-solidity company-box))
  '(warning-suppress-log-types '((auto-save))))
+;; (custom-set-faces
+;;  '(show-paren-match ((t (:background "red" :foreground "white")))))
+
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(show-paren-match ((t (:background "red" :foreground "white")))))
-
-
+ )
