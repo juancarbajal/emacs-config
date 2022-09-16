@@ -13,6 +13,7 @@
 (winner-mode 1)
 (windmove-default-keybindings)
 (savehist-mode 1)
+
 ;; (desktop-save-mode 1) ;; Guardar sesiones
 (prefer-coding-system 'utf-8)
 (setq coding-system-for-read 'utf-8)
@@ -31,7 +32,7 @@
 
 ;; (when (version<= "26.0.50" emacs-version )
 (global-display-line-numbers-mode)
-(set-frame-font "Hack 10" nil t)
+(set-frame-font "Hack 11" nil t)
 
 
 (setq bookmark-default-file "~/.emacs.d/saves/bookmarks.bmk" bookmark-save-flag 1)
@@ -83,65 +84,66 @@
                          ("melpa" . "http://melpa.org/packages/")
 												 ;; ("melpa-stable" . "https://stable.melpa.org/packages/")
 												 ("milkbox" . "http://melpa.milkbox.net/packages/")))
+
 (package-initialize)
-(when (not package-archive-contents)
-  (package-refresh-contents)
-	(if (= 1 0) (
-						 ;;M-x package-refresh-contents
-						 (package-install 'use-package)
-						 (package-install 'magit)
-						 (package-install 'lsp-mode)
-						 (package-install 'lsp-ui)
-						 ;; (package-install 'lsp-ivy)
-						 (package-install 'dap-mode)
-						 (package-install 'flycheck)
-						 (package-install 'projectile)
-						 (package-install 'company)
-						 (package-install 'company-box)
-						 (package-install 'multi-web-mode)
-						 ;; (package-install 'smartparens)
-						 (package-install 'yaml-mode)
-						 (package-install 'yasnippet-snippets)
-						 (package-install 'yasnippet-classic-snippets)
-						 (package-install 'dockerfile-mode)
-						 (package-install 'dotenv-mode)
-						 (package-install 'slime)
-						 ;; (package-install 'ivy)
-						 ;; (package-install 'ivy-prescient)
-						 (package-install 'counsel)
-						 (package-install 'swiper)
-						 (package-install 'counsel-projectile)
-						 (package-install 'with-editor)
-						 (package-install 'magit)
-						 (package-install 'which-key)
-						 (package-install 'powershell)
-						 (package-install 'ob-powershell)
-						 (package-install 'ob-sql-mode)
-						 (package-install 'ob-php)
-						 (package-install 'ob-go)
-						 (package-install 'treemacs)
-						 (package-install 'lsp-treemacs)
-						 ;; (package-install 'treemacs-projectile)
-						 (package-install 'treemacs-icons-dired)
-						 (package-install 'elpy)
-						 
-						 (package-install 'solidity-mode)
-						 (package-install 'company-solidity)
-						 (package-install 'solidity-flycheck)
 
-						 (package-install 'csharp-mode)
-						 (package-install 'dracula-theme)
-						 
-						 (package-inatall 'go-mode)
-						 (package-install 'go-snippets)
+;; (package-refresh-contents)
+(defvar my-packages '(better-defaults
+                      projectile
+                      clojure-mode
+                      cider
+											helm
+											rainbow-delimiters
+											use-package
+											magit
+											lsp-mode
+											lsp-ui
+											dap-mode
+											flycheck
+											projectile
+											company
+											company-box
+											prescient
+											company-prescient
+											multi-web-mode
+											yaml-mode
+											yasnippet-snippets
+											yasnippet-classic-snippets
+											dockerfile-mode
+											dotenv-mode
+											slime
+											with-editor
+											php-mode
+											magit
+											which-key
+											powershell
+											ob-powershell
+											ob-sql-mode
+											ob-php
+											ob-go
+											treemacs
+											lsp-treemacs
+											treemacs-projectile
+											treemacs-icons-dired
+											elpy
+											solidity-mode
+											company-solidity
+											solidity-flycheck
+											csharp-mode
+											dracula-theme
+											go-mode
+											go-snippets
+											rjsx-mode
+											prettier-js
+											tide
+											angular-mode
+											angular-snippets
+											))
 
-						 (package-install 'rjsx-mode)
-						 (package-install 'prettier-js)
-						 (package-install 'tide)
-						 (package-install 'angular-mode)
-						 (package-install 'angular-snippets)
-						 ))
-	)
+
+(dolist (p my-packages)
+  (unless (package-installed-p p)
+    (package-install p)))
 
 
 (require 'yasnippet)
@@ -154,10 +156,13 @@
         company-minimum-prefix-length 4
         company-selection-wrap-around t))
 (global-company-mode)
-(require 'company-box)
-(add-hook 'company-mode-hook 'company-box-mode)
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 
-
+;; (straight-use-package 'prescient)
+;; (straight-use-package 'company-prescient)
+(require 'prescient)
+(require 'company-prescient)
 ;; (use-package helm-config)
 (require 'helm)
 (use-package helm
@@ -165,7 +170,7 @@
 	(helm-mode 1)
 	:config
 	(require 'helm-config)
-	(setq	helm-split-window-in-side-p t 
+	(setq	helm-split-window-in-side-p t
 				helm-move-to-line-cycle-in-source t
 				)
 	(global-set-key (kbd "M-x") 'helm-M-x)
@@ -180,6 +185,8 @@
 	(define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 	(define-key helm-map (kbd "C-z") 'helm-select-action))
+
+
 ;;paren
 ;; (Use-Package Paren
 ;; 	:Init
@@ -187,10 +194,18 @@
 ;; 	:config(setq show-paren-style 'expression)
 ;; 	:custom-face(show-paren-match ((t(:background "red" :foreground "white")))))
 
+(require 'paren)
 (use-package paren
 	:init
-	(show-paren-mode 1)
-	:config(setq show-paren-style 'expression))
+  (show-paren-mode 1)
+	:config
+	;; (setq show-paren-style 'expression)
+	;; (setq show-paren-style 'mixed)
+	(setq show-paren-style 'parenthesis)
+	(set-face-background 'show-paren-match (face-background 'default))
+  (set-face-foreground 'show-paren-match "#def")
+  (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
+	)
 
 (use-package elec-pair
 	:hook ((prog-mode org-mode) . electric-pair-mode)
@@ -204,7 +219,12 @@
 															))
 	)
 
-
+(require 'rainbow-delimiters)
+(use-package rainbow-delimiters
+	:hook ((prog-mode org-mode) . rainbow-delimiters-mode)
+	:config
+	(setq global-rainbow-delimiters-mode t)
+	)
 ;; Html
 ;; (require 'web-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -215,6 +235,9 @@
 ;; (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+(add-to-list 'auto-mode-alist '("\\.pp\\.inc\\.pas\\'" . pascal-mode))
+
 
 (require 'multi-web-mode)
 (setq mweb-default-major-mode 'html-mode)
@@ -232,6 +255,7 @@
 (use-package lsp-mode
 :init
 (setq lsp-keymap-prefix "C-c l")
+(setq lsp-enable-symbol-highlighting t)
 :hook (
        (js-mode . lsp)
        (typescript-mode . lsp)
@@ -258,9 +282,6 @@
 (use-package lsp-ui :commands lsp-ui-mode)
 ;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 
-;; (use-package which-key
-;;     :config
-;;     (which-key-mode))
 
 (use-package which-key
     :config
@@ -373,7 +394,7 @@
 ;;(setq projectile-keymap-prefix (kbd "C-c p"))
 ;;(define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
 
-(counsel-projectile-mode 1)
+;;(counsel-projectile-mode 1)
 ;; (counsel-projectile-key-bindings)
 
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
@@ -442,15 +463,16 @@
              (define-key php-mode-map (kbd "M-[")
                'ac-php-location-stack-back)))
 
-
 ;;Keys
-(global-set-key [f5] 'revert-buffer)
-(global-set-key [f12] 'indent-buffer)
-(global-set-key [f6] 'indent-region)
-(global-set-key (kbd "C-c C-x") 'eval-region)
+(global-set-key (kbd "C-0") 'indent-region)
+(global-set-key (kbd "C-9") 'indent-buffer)
+(global-set-key (kbd "C-7") 'revert-buffer)
+(global-set-key (kbd "C-5") 'eval-region)
 
 
-(load-theme 'dracula t) ;;misterioso, manoj-dark  leuven
+;; (load-theme 'dracula t) ;;misterioso, manoj-dark  leuven modus-vivendi 
+;; (load-theme 'manoj-dark)
+(load-theme 'dracula t)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -458,7 +480,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-	 '("a556e4e6fc62469cd28a57c3b5386807d676a33176659f849fc53fa8763f5955" "63b2616880ed3fc55a75a6c074f20b4623a6df79be4973ec8ed8e0a0a354d570" "78e6be576f4a526d212d5f9a8798e5706990216e9be10174e3f3b015b8662e27" "a3e99dbdaa138996bb0c9c806bc3c3c6b4fd61d6973b946d750b555af8b7555b" default))
+	 '("7a8206a977c612016094e6390de94f6af98c3a4adc5b3561f56376730b98af9e" "7a4784fc0c0c853c578132e81a757a0f9b3e675fdd7e56303f3ee1fb8d7ae2a3" "b89a4f5916c29a235d0600ad5a0849b1c50fab16c2c518e1d98f0412367e7f97" "a556e4e6fc62469cd28a57c3b5386807d676a33176659f849fc53fa8763f5955" "63b2616880ed3fc55a75a6c074f20b4623a6df79be4973ec8ed8e0a0a354d570" "78e6be576f4a526d212d5f9a8798e5706990216e9be10174e3f3b015b8662e27" "a3e99dbdaa138996bb0c9c806bc3c3c6b4fd61d6973b946d750b555af8b7555b" default))
  '(ignored-local-variable-values
 	 '((eval setq lsp-clients-angular-language-server-command
 					 (let
@@ -469,7 +491,7 @@
 							 "--tsProbeLocations" ,(concat curr-proj-root "node_modules")
 							 "--stdio")))))
  '(package-selected-packages
-	 '(helm dracula-theme panda-theme spacemacs-theme prettier-js tide rjsx-mode ob-php ob-sql-mode ob-sql ob-go go-snippet angular-snippets angular-mode go-mode markdown-preview-mode multi-web-mode zen-mode zenburn-theme lsp-dart solidity-mode treemacs-icons-dired lsp-treemacs with-editor swiper counsel ivy yasnippet-classic-snippets yasnippet-snippets company projectile flycheck dap-mode lsp-mode magit yaml-mode which-key use-package typescript-mode swift3-mode swift-playground-mode swift-mode sr-speedbar solidity-flycheck slime powershell php-mode ob-powershell monokai-theme lsp-ui lsp-ivy ivy-prescient elpygen elpy dotenv-mode dockerfile-mode dart-mode csharp-mode counsel-projectile company-solidity company-box))
+	 '(clojure-mode better-defaults moe-theme cyberpunk-theme company-prescient prescient rainbow-delimiters rainbow-delimiter helm-projectile helm dracula-theme panda-theme spacemacs-theme prettier-js tide rjsx-mode ob-php ob-sql-mode ob-sql ob-go go-snippet angular-snippets angular-mode go-mode markdown-preview-mode multi-web-mode zen-mode zenburn-theme lsp-dart solidity-mode treemacs-icons-dired lsp-treemacs with-editor yasnippet-classic-snippets yasnippet-snippets company projectile flycheck dap-mode lsp-mode magit yaml-mode which-key use-package typescript-mode swift3-mode swift-playground-mode swift-mode sr-speedbar solidity-flycheck slime powershell php-mode ob-powershell monokai-theme lsp-ui elpygen elpy dotenv-mode dockerfile-mode dart-mode csharp-mode company-solidity company-box))
  '(warning-suppress-log-types '((auto-save))))
 ;; (custom-set-faces
 ;;  '(show-paren-match ((t (:background "red" :foreground "white")))))
