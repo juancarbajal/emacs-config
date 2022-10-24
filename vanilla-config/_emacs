@@ -99,7 +99,7 @@
 											lsp-mode
 											lsp-ui
 											dap-mode
-											flycheck
+											;; flycheck
 											projectile
 											company
 											company-box
@@ -113,7 +113,10 @@
 											dotenv-mode
 											slime
 											with-editor
-											php-mode
+											;; php-mode
+											;; company-php
+											;; flymake-php
+											phps-mode 
 											magit
 											which-key
 											powershell
@@ -128,14 +131,14 @@
 											elpy
 											solidity-mode
 											company-solidity
-											solidity-flycheck
+											;; solidity-flycheck
 											csharp-mode
 											dracula-theme
 											go-mode
 											go-snippets
 											rjsx-mode
 											prettier-js
-											tide
+											;; tide
 											angular-mode
 											angular-snippets
 											))
@@ -262,6 +265,7 @@
        (lsp-mode . lsp-enable-which-key-integration)
        (dart-mode-hook . lsp)
 			 (python-mode .lsp)
+			 (php-mode .lsp)
        )
 :commands lsp)
 (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
@@ -303,28 +307,28 @@
 ;; (slime)
 
 ;;Debugging
-(setq dap-auto-configure-features '(sessions locals controls tooltip))
-(require 'dap-dlv-go)
-;; (require 'dap-chrome)
-(require 'dap-edge)
+;; (setq dap-auto-configure-features '(sessions locals controls tooltip))
+;; (require 'dap-dlv-go)
+;; ;; (require 'dap-chrome)
+;; (require 'dap-edge)
 
 
 ;;Javascript
 (use-package rjsx-mode
 	:ensure t
 	:mode "\\.js\\'")
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  (company-mode +1))
-(use-package tide
-	:ensure t
-	:after (rjsx-mode company flycheck)
-	:hook (rjsx-mode . setup-tide-mode))
+;; (defun setup-tide-mode ()
+;;   (interactive)
+;;   (tide-setup)
+;;   (flycheck-mode +1)
+;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;;   (eldoc-mode +1)
+;;   (tide-hl-identifier-mode +1)
+;;   (company-mode +1))
+;; (use-package tide
+;; 	:ensure t
+;; 	:after (rjsx-mode company flycheck)
+;; 	:hook (rjsx-mode . setup-tide-mode))
 (use-package prettier-js
 	:ensure t
 	:after (rjsx-mode)
@@ -443,25 +447,39 @@
 ;; (global-set-key (kbd "C-c t") 'counsel-load-theme)
 ;; (global-set-key (kbd "C-c F") 'counsel-org-file)
 
-
+;; (package-install 'phps-mode)
+(use-package phps-mode
+    :after flycheck
+    :ensure t
+    :mode ("\\.php\\'" "\\.phtml\\'")
+    :config
+    (phps-mode-flycheck-setup)
+    (setq phps-mode-async-process nil)
+    (setq phps-mode-async-process-using-async-el nil))
 
 ;;php mode
-(require 'php-mode)
+;; (require 'php-mode)
+;; (require 'flymake-php)
+;; (use-package php-mode
+;;  	:init
+;; 	(add-hook 'php-mode-hook
+;; 						'(lambda ()
+;; 							 (require 'company-php)
+;; 							 (company-mode t)
+;; 							 (add-to-list 'company-backends 'company-ac-php-backend)
+;; 							 (ac-php-core-eldoc-setup)
+;; 							 (set (make-local-variable 'company-backends)
+;; 										'((company-ac-php-backend company-dabbrev-code)
+;; 											company-capf company-files))
+;; 							 ))
+;; 	:config
+;; 	(setq php-mode-coding-style 'PSR-2)
+;; 	(define-key php-mode-map (kbd "M-]") 'ac-php-find-symbol-at-point)
+;;   (define-key php-mode-map (kbd "M-[") 'ac-php-location-stack-back)
+;; 	(flymake-php-load)
+;; 	)
 
-(add-hook 'php-mode-hook
-          '(lambda ()
-             (company-mode t)
-             (require 'company-php)
-             (ac-php-core-eldoc-setup)
 
-             (set (make-local-variable 'company-backends)
-                  '((company-ac-php-backend company-dabbrev-code)
-                    company-capf company-files))
-             (define-key php-mode-map (kbd "M-]")
-               'ac-php-find-symbol-at-point)
-
-             (define-key php-mode-map (kbd "M-[")
-               'ac-php-location-stack-back)))
 
 ;;Keys
 (global-set-key (kbd "C-0") 'indent-region)
@@ -491,7 +509,7 @@
 							 "--tsProbeLocations" ,(concat curr-proj-root "node_modules")
 							 "--stdio")))))
  '(package-selected-packages
-	 '(clojure-mode better-defaults moe-theme cyberpunk-theme company-prescient prescient rainbow-delimiters rainbow-delimiter helm-projectile helm dracula-theme panda-theme spacemacs-theme prettier-js tide rjsx-mode ob-php ob-sql-mode ob-sql ob-go go-snippet angular-snippets angular-mode go-mode markdown-preview-mode multi-web-mode zen-mode zenburn-theme lsp-dart solidity-mode treemacs-icons-dired lsp-treemacs with-editor yasnippet-classic-snippets yasnippet-snippets company projectile flycheck dap-mode lsp-mode magit yaml-mode which-key use-package typescript-mode swift3-mode swift-playground-mode swift-mode sr-speedbar solidity-flycheck slime powershell php-mode ob-powershell monokai-theme lsp-ui elpygen elpy dotenv-mode dockerfile-mode dart-mode csharp-mode company-solidity company-box))
+	 '(phps-mode clojure-mode better-defaults moe-theme cyberpunk-theme company-prescient prescient rainbow-delimiters rainbow-delimiter helm-projectile helm dracula-theme panda-theme spacemacs-theme prettier-js rjsx-mode ob-sql-mode ob-sql ob-go go-snippet angular-snippets angular-mode go-mode markdown-preview-mode multi-web-mode zen-mode zenburn-theme lsp-dart solidity-mode treemacs-icons-dired lsp-treemacs with-editor yasnippet-classic-snippets yasnippet-snippets company projectile dap-mode lsp-mode magit yaml-mode which-key use-package typescript-mode swift3-mode swift-playground-mode swift-mode sr-speedbar slime powershell ob-powershell monokai-theme lsp-ui elpygen elpy dotenv-mode dockerfile-mode dart-mode csharp-mode company-solidity company-box))
  '(warning-suppress-log-types '((auto-save))))
 ;; (custom-set-faces
 ;;  '(show-paren-match ((t (:background "red" :foreground "white")))))
