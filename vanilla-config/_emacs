@@ -14,13 +14,10 @@
 (windmove-default-keybindings)
 (savehist-mode 1)
 
-;; (desktop-save-mode 1) ;; Guardar sesiones
 (prefer-coding-system 'utf-8)
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
-;; (invert-face 'default)
-;;(global-font-lock-mode t)
-(menu-bar-mode -1)
+(invert-face 'default)
 (tool-bar-mode -1)
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup/"))
 			backup-by-copying			 t	; Don't de-link hard links
@@ -28,12 +25,10 @@
 			delete-old-versions		 t	; Automatically delete excess backups:
 			kept-new-versions			 20 ; how many of the newest versions to keep
 			kept-old-versions			 5) ; and how many of the old
-(setq make-backup-files nil)
+(setq auto-save-default nil)
 
-;; (when (version<= "26.0.50" emacs-version )
 (global-display-line-numbers-mode)
-(set-frame-font "Hack 11" nil t)
-
+(set-frame-font "Hack 12" nil t)
 
 (setq bookmark-default-file "~/.emacs.d/saves/bookmarks.bmk" bookmark-save-flag 1)
 (setq x-select-enable-clipboard t)
@@ -43,6 +38,10 @@
 (fset `yes-or-no-p `y-or-n-p)
 
 (set-buffer-file-coding-system 'unix 't)
+(setq-default buffer-file-coding-system 'utf-8-unix)
+(setq-default default-buffer-file-coding-system 'utf-8-unix)
+(set-default-coding-systems 'utf-8-unix)
+(prefer-coding-system 'utf-8-unix)
 
 (defun dos2unix (buffer)
 	"Automate M-% C-q C-m RET C-q C-j RET"
@@ -64,13 +63,11 @@
 	)
 
 (setq find-file-visit-truename t)
-;;(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
-(setq visible-bell t)
 (setq inhibit-startup-message		t) ;;init with blank file
 (setq global-linum-mode t)
 (setq column-number-mode t)
-(setq-default tab-width 2)
-(setq c-basic-offset 2)
+(setq-default tab-width 4)
+(setq c-basic-offset 4)
 
 
 (defun indent-buffer ()
@@ -82,8 +79,7 @@
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
                          ("melpa" . "http://melpa.org/packages/")
-												 ;; ("melpa-stable" . "https://stable.melpa.org/packages/")
-												 ("milkbox" . "http://melpa.milkbox.net/packages/")))
+												 ))
 
 (package-initialize)
 
@@ -95,14 +91,13 @@
 											helm
 											rainbow-delimiters
 											use-package
-											magit
 											lsp-mode
 											lsp-ui
 											dap-mode
-											;; flycheck
+											flycheck
 											projectile
 											company
-											company-box
+											;; company-box
 											prescient
 											company-prescient
 											multi-web-mode
@@ -113,34 +108,30 @@
 											dotenv-mode
 											slime
 											with-editor
-											;; php-mode
-											;; company-php
-											;; flymake-php
-											phps-mode 
+											web-mode
+											php-mode
+											company-php	
 											magit
 											which-key
 											powershell
+											org-bullets
 											ob-powershell
 											ob-sql-mode
 											ob-php
 											ob-go
 											treemacs
 											lsp-treemacs
-											treemacs-projectile
-											treemacs-icons-dired
+											python-mode
 											elpy
 											solidity-mode
 											company-solidity
-											;; solidity-flycheck
-											csharp-mode
+											dart-mode
+											lsp-dart
 											dracula-theme
 											go-mode
 											go-snippets
-											rjsx-mode
 											prettier-js
-											;; tide
-											angular-mode
-											angular-snippets
+											elixir-mode
 											))
 
 
@@ -159,11 +150,7 @@
         company-minimum-prefix-length 4
         company-selection-wrap-around t))
 (global-company-mode)
-(use-package company-box
-  :hook (company-mode . company-box-mode))
 
-;; (straight-use-package 'prescient)
-;; (straight-use-package 'company-prescient)
 (require 'prescient)
 (require 'company-prescient)
 ;; (use-package helm-config)
@@ -190,20 +177,12 @@
 	(define-key helm-map (kbd "C-z") 'helm-select-action))
 
 
-;;paren
-;; (Use-Package Paren
-;; 	:Init
-;; 	(show-paren-mode 1)
-;; 	:config(setq show-paren-style 'expression)
-;; 	:custom-face(show-paren-match ((t(:background "red" :foreground "white")))))
 
 (require 'paren)
 (use-package paren
 	:init
   (show-paren-mode 1)
 	:config
-	;; (setq show-paren-style 'expression)
-	;; (setq show-paren-style 'mixed)
 	(setq show-paren-style 'parenthesis)
 	(set-face-background 'show-paren-match (face-background 'default))
   (set-face-foreground 'show-paren-match "#def")
@@ -228,16 +207,6 @@
 	:config
 	(setq global-rainbow-delimiters-mode t)
 	)
-;; Html
-;; (require 'web-mode)
-;; (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-;; (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-;; (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-;; (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-;; (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-;; (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-;; (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-;; (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 (add-to-list 'auto-mode-alist '("\\.pp\\.inc\\.pas\\'" . pascal-mode))
 
@@ -249,28 +218,15 @@
     (css-mode "<style[^>]*>" "</style>")))
 (setq mweb-filename-extensions '("htm" "html" "phtml"))
 (multi-web-global-mode 1)
+
 ;;LSP
-;; Este bloque demora 2 segundos en cargarse 
 ;; npm install -g typescript-language-server typescript
 ;; typescript-language-server --stdio
 
-(require 'lsp-mode)
-(use-package lsp-mode
-:init
-(setq lsp-keymap-prefix "C-c l")
-(setq lsp-enable-symbol-highlighting t)
-:hook (
-       (js-mode . lsp)
-       (typescript-mode . lsp)
-       (lsp-mode . lsp-enable-which-key-integration)
-       (dart-mode-hook . lsp)
-			 (python-mode .lsp)
-			 (php-mode .lsp)
-       )
-:commands lsp)
-(define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-
 ;;lsp-dart
+(when (cl-find-if-not #'package-installed-p package-selected-packages)
+  (package-refresh-contents)
+  (mapc #'package-install package-selected-packages))
 (setq gc-cons-threshold (* 100 1024 1024)
       read-process-output-max (* 1024 1024))
 
@@ -282,9 +238,7 @@
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
-
 (use-package lsp-ui :commands lsp-ui-mode)
-;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 
 
 (use-package which-key
@@ -298,37 +252,10 @@
   :ensure t
   :init (global-flycheck-mode))
 
-;;Lisp
-;; (setq inferior-lisp-program "sbcl")
-;; (add-to-list 'load-path (concat (getenv "HOME") "\\" (getenv "SLIME")))
-;; (require 'slime)
-;; (slime-setup '(slime-fancy))
-;; (define-key global-map (kbd "<f12>") 'slime-selector)
-;; (slime)
-
-;;Debugging
-;; (setq dap-auto-configure-features '(sessions locals controls tooltip))
-;; (require 'dap-dlv-go)
-;; ;; (require 'dap-chrome)
-;; (require 'dap-edge)
-
-
 ;;Javascript
 (use-package rjsx-mode
 	:ensure t
 	:mode "\\.js\\'")
-;; (defun setup-tide-mode ()
-;;   (interactive)
-;;   (tide-setup)
-;;   (flycheck-mode +1)
-;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
-;;   (eldoc-mode +1)
-;;   (tide-hl-identifier-mode +1)
-;;   (company-mode +1))
-;; (use-package tide
-;; 	:ensure t
-;; 	:after (rjsx-mode company flycheck)
-;; 	:hook (rjsx-mode . setup-tide-mode))
 (use-package prettier-js
 	:ensure t
 	:after (rjsx-mode)
@@ -338,25 +265,13 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-tooltip-align-annotations t)
 
-;; (add-hook 'before-save-hook 'tide-format-before-save)
-;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
-;; (add-hook 'prog-mode-hook 'smartparens-mode)
-;; (add-hook 'text-mode-hook 'smartparens-mode)
-
-
-
-
-;; (add-hook 'after-init-hook 'global-company-mode)
-;; (add-hook 'php-mode-hook 'company-php)
-;; (add-hook 'c++-mode 'irony-mode)
-
 ;;Python
-;; (elpy-enable)
-;; (add-hook 'python-hook 'company-anaconda)
-;; (use-package python-mode
-;; 	:ensure nil
-;; 	:custom
-;; 	(python-shell-interpreter "python"))
+(elpy-enable)
+(add-hook 'python-hook 'company-anaconda)
+(use-package python-mode
+	:ensure nil
+	:custom
+	(python-shell-interpreter "python"))
 
 
 ;; Org mode
@@ -365,41 +280,35 @@
 '(
 (emacs-lisp . t)
 (org . t)
-;; (sh . t)
 (go . t)
-;; (C . t)
-;; (python . t)
-;; (javascript . t)
-;; (gnuplot . t)
-;; (octave . t)
-;; (R . t)
-;; (dot . t)
-;; (awk . t)
+(python . t)
 (sql . t)
+(sqlite . t)
 (powershell . t)
 ))
 (org-indent-mode 1)
 (org-set-startup-visibility)
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
+(setq ispell-program-name "hunspell")
+(setq ispell-program-name "c:/Program Files (x86)/hunspell/bin/hunspell.exe")
+(setenv "DICTIONARY" "es_ES")
+(require 'ispell)
+(defun flyspell-spanish ()
+  (interactive)
+  (ispell-change-dictionary "castellano")
+  (flyspell-buffer))
+(defun flyspell-english ()
+  (interactive)
+  (ispell-change-dictionary "default")
+  (flyspell-buffer))
+(dolist (hook '(org-mode-hook))
+	(add-hook hook (lambda() (flyspell-mode 1))))
 
-;;eshell
-;; (add-hook 'shell-mode-hook
-;;       (lambda ()
-;;         (face-remap-set-base 'comint-highlight-prompt :inherit nil)))
-
-;; (with-eval-after-load "esh-opt"
-;;   (autoload 'epe-theme-lambda "eshell-prompt-extras")
-;;   (setq eshell-highlight-prompt nil
-;;         eshell-prompt-function 'epe-theme-lambda))
 
 ;; Projectile
 (projectile-mode +1)
-;; ((nil . ((projectile-enable-caching . t)))) ;; cache 
-;;(setq projectile-keymap-prefix (kbd "C-c p"))
-;;(define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
-
-;;(counsel-projectile-mode 1)
-;; (counsel-projectile-key-bindings)
 
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 (setq projectile-sort-order 'recently-active) ;; Recently active and opened recentf (openned)
@@ -407,90 +316,39 @@
 
 ;;Ivy
 (setq enable-recursive-minibuffers t)
-;; (setq ivy-use-virtual-buffers t)
-;; (setq ivy-count-format "(%d/%d) ")
-;; (setq projectile-completion-system 'ivy)
-;; (ivy-mode 1)
-;; (ivy-prescient-mode 1)
-;; (setq ivy-use-virtual-buffers t)
-;; (setq ivy-count-format "(%d/%d) ")
-;; (setq ivy-use-selectable-prompt t)
-;; (global-set-key (kbd "C-s") 'swiper-isearch)
-;; (global-set-key (kbd "M-x") 'counsel-M-x)
-;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-;; (global-set-key (kbd "M-y") 'counsel-yank-pop)
-;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-;; (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
-;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
-;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-;; (global-set-key (kbd "<f2> j") 'counsel-set-variable)
-;; (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-;; (global-set-key (kbd "C-c v") 'ivy-push-view)
-;; (global-set-key (kbd "C-c V") 'ivy-pop-view)
-;; (global-set-key (kbd "C-c c") 'counsel-compile)
-;; (global-set-key (kbd "C-c g") 'counsel-git)
-;; (global-set-key (kbd "C-c j") 'counsel-git-grep)
-;; (global-set-key (kbd "C-c L") 'counsel-git-log)
-;; (global-set-key (kbd "C-c k") 'counsel-rg)
-;; (global-set-key (kbd "C-c m") 'counsel-linux-app)
-;; (global-set-key (kbd "C-c n") 'counsel-fzf)
-;; (global-set-key (kbd "C-x l") 'counsel-locate)
-;; (global-set-key (kbd "C-c J") 'counsel-file-jump)
-;; (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-;; (global-set-key (kbd "C-c C-r") 'ivy-resume)
-;; (global-set-key (kbd "C-c b") 'counsel-bookmark)
-;; (global-set-key (kbd "C-c d") 'counsel-descbinds)
-;; (global-set-key (kbd "C-c g") 'counsel-git)
-;; (global-set-key (kbd "C-c o") 'counsel-outline)
-;; (global-set-key (kbd "C-c t") 'counsel-load-theme)
-;; (global-set-key (kbd "C-c F") 'counsel-org-file)
-
-;; (package-install 'phps-mode)
-(use-package phps-mode
-    :after flycheck
-    :ensure t
-    :mode ("\\.php\\'" "\\.phtml\\'")
-    :config
-    (phps-mode-flycheck-setup)
-    (setq phps-mode-async-process nil)
-    (setq phps-mode-async-process-using-async-el nil))
 
 ;;php mode
-;; (require 'php-mode)
-;; (require 'flymake-php)
-;; (use-package php-mode
-;;  	:init
-;; 	(add-hook 'php-mode-hook
-;; 						'(lambda ()
-;; 							 (require 'company-php)
-;; 							 (company-mode t)
-;; 							 (add-to-list 'company-backends 'company-ac-php-backend)
-;; 							 (ac-php-core-eldoc-setup)
-;; 							 (set (make-local-variable 'company-backends)
-;; 										'((company-ac-php-backend company-dabbrev-code)
-;; 											company-capf company-files))
-;; 							 ))
-;; 	:config
-;; 	(setq php-mode-coding-style 'PSR-2)
-;; 	(define-key php-mode-map (kbd "M-]") 'ac-php-find-symbol-at-point)
-;;   (define-key php-mode-map (kbd "M-[") 'ac-php-location-stack-back)
-;; 	(flymake-php-load)
-;; 	)
+(require 'php-mode)
+(use-package php-mode
+  :init
+  :config
+  (setq php-mode-coding-style 'psr2)
+  (define-key php-mode-map (kbd "M-]") 'ac-php-find-symbol-at-point)
+  (define-key php-mode-map (kbd "M-[") 'ac-php-location-stack-back)
+  )
 
-
+(require 'lsp-mode)
+(use-package lsp-mode
+:init
+(setq lsp-keymap-prefix "C-c l")
+(setq lsp-enable-symbol-highlighting t)
+:hook (
+       (js-mode . lsp)
+       (typescript-mode . lsp)
+       (lsp-mode . lsp-enable-which-key-integration)
+       (dart-mode . lsp)
+			 (python-mode . lsp)
+			 (php-mode . lsp)
+       )
+:commands lsp)
+(define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 
 ;;Keys
-(global-set-key (kbd "C-0") 'indent-region)
-(global-set-key (kbd "C-9") 'indent-buffer)
-(global-set-key (kbd "C-7") 'revert-buffer)
-(global-set-key (kbd "C-5") 'eval-region)
+(global-set-key (kbd "C-6") 'indent-region)
+(global-set-key (kbd "C-7") 'indent-buffer)
+(global-set-key (kbd "C-5") 'revert-buffer)
+(global-set-key (kbd "C-9") 'eval-region)
 
-
-;; (load-theme 'dracula t) ;;misterioso, manoj-dark  leuven modus-vivendi 
-;; (load-theme 'manoj-dark)
-(load-theme 'dracula t)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -498,19 +356,20 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-	 '("7a8206a977c612016094e6390de94f6af98c3a4adc5b3561f56376730b98af9e" "7a4784fc0c0c853c578132e81a757a0f9b3e675fdd7e56303f3ee1fb8d7ae2a3" "b89a4f5916c29a235d0600ad5a0849b1c50fab16c2c518e1d98f0412367e7f97" "a556e4e6fc62469cd28a57c3b5386807d676a33176659f849fc53fa8763f5955" "63b2616880ed3fc55a75a6c074f20b4623a6df79be4973ec8ed8e0a0a354d570" "78e6be576f4a526d212d5f9a8798e5706990216e9be10174e3f3b015b8662e27" "a3e99dbdaa138996bb0c9c806bc3c3c6b4fd61d6973b946d750b555af8b7555b" default))
+   '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926" "7a8206a977c612016094e6390de94f6af98c3a4adc5b3561f56376730b98af9e" "7a4784fc0c0c853c578132e81a757a0f9b3e675fdd7e56303f3ee1fb8d7ae2a3" "b89a4f5916c29a235d0600ad5a0849b1c50fab16c2c518e1d98f0412367e7f97" "a556e4e6fc62469cd28a57c3b5386807d676a33176659f849fc53fa8763f5955" "63b2616880ed3fc55a75a6c074f20b4623a6df79be4973ec8ed8e0a0a354d570" "78e6be576f4a526d212d5f9a8798e5706990216e9be10174e3f3b015b8662e27" "a3e99dbdaa138996bb0c9c806bc3c3c6b4fd61d6973b946d750b555af8b7555b" default))
  '(ignored-local-variable-values
-	 '((eval setq lsp-clients-angular-language-server-command
-					 (let
-							 ((curr-proj-root
-								 (projectile-project-root)))
-						 `("node" ,(concat curr-proj-root "node_modules/@angular/language-server")
-							 "--ngProbeLocations" ,(concat curr-proj-root "node_modules")
-							 "--tsProbeLocations" ,(concat curr-proj-root "node_modules")
-							 "--stdio")))))
+   '((eval setq lsp-clients-angular-language-server-command
+		   (let
+			   ((curr-proj-root
+				 (projectile-project-root)))
+			 `("node" ,(concat curr-proj-root "node_modules/@angular/language-server")
+			   "--ngProbeLocations" ,(concat curr-proj-root "node_modules")
+			   "--tsProbeLocations" ,(concat curr-proj-root "node_modules")
+			   "--stdio")))))
  '(package-selected-packages
-	 '(phps-mode clojure-mode better-defaults moe-theme cyberpunk-theme company-prescient prescient rainbow-delimiters rainbow-delimiter helm-projectile helm dracula-theme panda-theme spacemacs-theme prettier-js rjsx-mode ob-sql-mode ob-sql ob-go go-snippet angular-snippets angular-mode go-mode markdown-preview-mode multi-web-mode zen-mode zenburn-theme lsp-dart solidity-mode treemacs-icons-dired lsp-treemacs with-editor yasnippet-classic-snippets yasnippet-snippets company projectile dap-mode lsp-mode magit yaml-mode which-key use-package typescript-mode swift3-mode swift-playground-mode swift-mode sr-speedbar slime powershell ob-powershell monokai-theme lsp-ui elpygen elpy dotenv-mode dockerfile-mode dart-mode csharp-mode company-solidity company-box))
- '(warning-suppress-log-types '((auto-save))))
+   '(vue-mode web-mode django-snippets yasnippet-classic-snippets yasnippet-snippets terraform-mode elixir-mode org-bullets xml-format phps-mode clojure-mode better-defaults moe-theme cyberpunk-theme company-prescient prescient rainbow-delimiters rainbow-delimiter helm-projectile helm dracula-theme panda-theme spacemacs-theme prettier-js rjsx-mode ob-sql-mode ob-sql ob-go go-snippet angular-mode go-mode markdown-preview-mode multi-web-mode zen-mode zenburn-theme lsp-dart solidity-mode with-editor company projectile dap-mode lsp-mode magit yaml-mode which-key use-package typescript-mode swift3-mode swift-playground-mode swift-mode sr-speedbar slime powershell ob-powershell monokai-theme lsp-ui elpygen elpy dotenv-mode dockerfile-mode dart-mode csharp-mode company-solidity))
+ '(warning-suppress-log-types '((auto-save)))
+ '(warning-suppress-types '(((flymake flymake)))))
 ;; (custom-set-faces
 ;;  '(show-paren-match ((t (:background "red" :foreground "white")))))
 
@@ -521,3 +380,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'upcase-region 'disabled nil)
