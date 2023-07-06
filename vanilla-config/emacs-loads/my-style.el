@@ -1,0 +1,16 @@
+(show-paren-mode 1)
+(blink-cursor-mode 1)
+(global-visual-line-mode t)
+(fset `yes-or-no-p `y-or-n-p)
+(tool-bar-mode -1)
+(setq find-file-visit-truename t)
+;;(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+(setq inhibit-startup-message		t) ;;init with blank file
+(setq global-linum-mode t)
+(setq column-number-mode t)
+
+(global-display-line-numbers-mode)
+(set-frame-font "Hack 12" nil t)
+;; (load-theme 'manoj-dark)
+(load-theme 'tango-dark)
+(provide 'my-style)

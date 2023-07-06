@@ -1,0 +1,6 @@
+(global-set-key (kbd "C-6") 'indent-region)
+(global-set-key (kbd "C-7") 'indent-buffer)
+(global-set-key (kbd "C-5") 'revert-buffer)
+(global-set-key (kbd "C-9") 'eval-region)
+(global-set-key (kbd "C-c k") 'helm-grep-do-git-grep)
+(provide 'my-keys)

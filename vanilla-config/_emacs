@@ -1,354 +1,33 @@
+;;; start package
+(setq gc-cons-threshold (* 50 1000 1000))
+(setq gc-cons-percentage 0.6)
+(add-to-list 'load-path "~/emacs-loads")
+(require 'my-settings)
+(require 'my-packages)
+(require 'my-scripts)
+(require 'my-keys)
+(require 'my-style)
+(require 'my-autocomplete)
+;; (require 'my-vertico)
+;; (require 'my-ivy)
+(require 'my-helm)
+;; (require 'my-spell)
+(require 'my-org)
+(require 'my-projectile)
+(require 'my-flycheck)
+(require 'my-lsp)
+(require 'my-dap)
+;; ;; (require 'my-yasnippet)
+(require 'my-programming)
+(require 'my-web)
+(require 'my-js)
+;; (require 'my-pascal)
+(require 'my-dart)
+(require 'my-python)
+;; (require 'my-php)
+(require 'my-go)
+
 (setq gc-cons-threshold (* 2 1000 1000))
-(prefer-coding-system 'utf-8)
-(setq default-file-name-coding-system 'UTF-8)
-(setenv "CVS_RSH" "ssh")
-(setenv "WikiDataDir" "test-data")
-(setq visible-bell t)
-(setq mouse-drag-copy-region t)
-(setq history-length 1000)
-(setq tramp-auto-save-directory (getenv "TEMP"))
-(setq shell-file-name "C:/cygwin64/bin/bash.exe")
-(show-paren-mode 1)
-(blink-cursor-mode 1)
-(winner-mode 1)
-(windmove-default-keybindings)
-(savehist-mode 1)
-
-(prefer-coding-system 'utf-8)
-(setq coding-system-for-read 'utf-8)
-(setq coding-system-for-write 'utf-8)
-(invert-face 'default)
-(tool-bar-mode -1)
-(setq backup-directory-alist '(("." . "~/.emacs.d/backup/"))
-			backup-by-copying			 t	; Don't de-link hard links
-			version-control				 t	; Use version numbers on backups
-			delete-old-versions		 t	; Automatically delete excess backups:
-			kept-new-versions			 20 ; how many of the newest versions to keep
-			kept-old-versions			 5) ; and how many of the old
-(setq auto-save-default nil)
-
-(global-display-line-numbers-mode)
-(set-frame-font "Hack 12" nil t)
-
-(setq bookmark-default-file "~/.emacs.d/saves/bookmarks.bmk" bookmark-save-flag 1)
-(setq x-select-enable-clipboard t)
-(if (eq system-type 'gnu-linux) (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
-(if (eq system-type 'windows-nt) (setq interprogram-paste-function 'x-selection-value))
-(global-visual-line-mode t)
-(fset `yes-or-no-p `y-or-n-p)
-
-(set-buffer-file-coding-system 'unix 't)
-(setq-default buffer-file-coding-system 'utf-8-unix)
-(setq-default default-buffer-file-coding-system 'utf-8-unix)
-(set-default-coding-systems 'utf-8-unix)
-(prefer-coding-system 'utf-8-unix)
-
-(defun dos2unix (buffer)
-	"Automate M-% C-q C-m RET C-q C-j RET"
-	(interactive "*b")
-	(save-excursion
-	(goto-char (point-min))
-	(while (search-forward (string ?\C-m) nil t)
-		(replace-match (string ?\C-j) nil t))))
-
-(defun convert-utf8 ()
-	(interactive)
-	(let ((coding-system-for-read 'utf8-unix)
-		(coding-system-for-write 'utf8-unix)
-		(coding-system-require-warning t)
-		(current-prefix-arg nil))
-	(message "has: Reopened file with coding set to windows-1252")
-	(find-alternate-file buffer-file-name)
-	)
-	)
-
-(setq find-file-visit-truename t)
-(setq inhibit-startup-message		t) ;;init with blank file
-(setq global-linum-mode t)
-(setq column-number-mode t)
-(setq-default tab-width 4)
-(setq c-basic-offset 4)
-
-
-(defun indent-buffer ()
-  (interactive)
-  (save-excursion
-	(indent-region (point-min) (point-max) nil)))
-
-(require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.org/packages/")
-												 ))
-
-(package-initialize)
-
-;; (package-refresh-contents)
-(defvar my-packages '(better-defaults
-                      projectile
-                      clojure-mode
-                      cider
-											helm
-											rainbow-delimiters
-											use-package
-											lsp-mode
-											lsp-ui
-											dap-mode
-											flycheck
-											projectile
-											company
-											;; company-box
-											prescient
-											company-prescient
-											multi-web-mode
-											yaml-mode
-											yasnippet-snippets
-											yasnippet-classic-snippets
-											dockerfile-mode
-											dotenv-mode
-											slime
-											with-editor
-											web-mode
-											php-mode
-											company-php	
-											magit
-											which-key
-											powershell
-											org-bullets
-											ob-powershell
-											ob-sql-mode
-											ob-php
-											ob-go
-											treemacs
-											lsp-treemacs
-											python-mode
-											elpy
-											solidity-mode
-											company-solidity
-											dart-mode
-											lsp-dart
-											dracula-theme
-											go-mode
-											go-snippets
-											prettier-js
-											elixir-mode
-											))
-
-
-(dolist (p my-packages)
-  (unless (package-installed-p p)
-    (package-install p)))
-
-
-(require 'yasnippet)
-(yas-global-mode 1)
-
-;; Auto completion
-(use-package company
-  :config
-  (setq company-idle-delay 0
-        company-minimum-prefix-length 4
-        company-selection-wrap-around t))
-(global-company-mode)
-
-(require 'prescient)
-(require 'company-prescient)
-;; (use-package helm-config)
-(require 'helm)
-(use-package helm
-	:init
-	(helm-mode 1)
-	:config
-	(require 'helm-config)
-	(setq	helm-split-window-in-side-p t
-				helm-move-to-line-cycle-in-source t
-				)
-	(global-set-key (kbd "M-x") 'helm-M-x)
-	(global-set-key (kbd "M-x") 'helm-M-x)
-	(global-set-key (kbd "C-x r b") 'helm-filtered-bookmarks)
-	(global-set-key (kbd "C-x C-f") 'helm-find-files)
-	(global-set-key (kbd "C-x b") 'helm-mini)
-	(global-set-key (kbd "C-x C-r") 'helm-recentf)
-	(global-set-key (kbd "C-c i") 'helm-imenu)
-	(global-set-key (kbd "C-s") 'helm-occur)
-	(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-	(define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-	(define-key helm-map (kbd "C-z") 'helm-select-action))
-
-
-
-(require 'paren)
-(use-package paren
-	:init
-  (show-paren-mode 1)
-	:config
-	(setq show-paren-style 'parenthesis)
-	(set-face-background 'show-paren-match (face-background 'default))
-  (set-face-foreground 'show-paren-match "#def")
-  (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
-	)
-
-(use-package elec-pair
-	:hook ((prog-mode org-mode) . electric-pair-mode)
-	:config
-	(setq electric-pair-pairs '(
-															(?\{ . ?\})
-															(?\[ . ?\])
-															(?\< . ?\>)
-															(?\' . ?\')
-															(?\` . ?\`)
-															))
-	)
-
-(require 'rainbow-delimiters)
-(use-package rainbow-delimiters
-	:hook ((prog-mode org-mode) . rainbow-delimiters-mode)
-	:config
-	(setq global-rainbow-delimiters-mode t)
-	)
-
-(add-to-list 'auto-mode-alist '("\\.pp\\.inc\\.pas\\'" . pascal-mode))
-
-
-(require 'multi-web-mode)
-(setq mweb-default-major-mode 'html-mode)
-(setq mweb-tags 
-  '((js-mode  "<script[^>]*>" "</script>")
-    (css-mode "<style[^>]*>" "</style>")))
-(setq mweb-filename-extensions '("htm" "html" "phtml"))
-(multi-web-global-mode 1)
-
-;;LSP
-;; npm install -g typescript-language-server typescript
-;; typescript-language-server --stdio
-
-;;lsp-dart
-(when (cl-find-if-not #'package-installed-p package-selected-packages)
-  (package-refresh-contents)
-  (mapc #'package-install package-selected-packages))
-(setq gc-cons-threshold (* 100 1024 1024)
-      read-process-output-max (* 1024 1024))
-
-;;lsp gopls
-(require 'lsp-mode)
-(add-hook 'go-mode-hook #'lsp-deferred)
-(defun lsp-go-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-
-(use-package lsp-ui :commands lsp-ui-mode)
-
-
-(use-package which-key
-    :config
-    (which-key-mode)
-    (setq which-key-idle-delay 0.5
-          which-key-idle-secondary-delay 0.5)
-    (which-key-setup-side-window-bottom))
-
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
-
-;;Javascript
-(use-package rjsx-mode
-	:ensure t
-	:mode "\\.js\\'")
-(use-package prettier-js
-	:ensure t
-	:after (rjsx-mode)
-	:hook (rjsx-mode . prettier-js-mode))
-
-
-(add-hook 'after-init-hook 'global-company-mode)
-(setq company-tooltip-align-annotations t)
-
-;;Python
-(elpy-enable)
-(add-hook 'python-hook 'company-anaconda)
-(use-package python-mode
-	:ensure nil
-	:custom
-	(python-shell-interpreter "python"))
-
-
-;; Org mode
-(org-babel-do-load-languages
-'org-babel-load-languages
-'(
-(emacs-lisp . t)
-(org . t)
-(go . t)
-(python . t)
-(sql . t)
-(sqlite . t)
-(powershell . t)
-))
-(org-indent-mode 1)
-(org-set-startup-visibility)
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-(setq ispell-program-name "hunspell")
-(setq ispell-program-name "c:/Program Files (x86)/hunspell/bin/hunspell.exe")
-(setenv "DICTIONARY" "es_ES")
-(require 'ispell)
-(defun flyspell-spanish ()
-  (interactive)
-  (ispell-change-dictionary "castellano")
-  (flyspell-buffer))
-(defun flyspell-english ()
-  (interactive)
-  (ispell-change-dictionary "default")
-  (flyspell-buffer))
-(dolist (hook '(org-mode-hook))
-	(add-hook hook (lambda() (flyspell-mode 1))))
-
-
-;; Projectile
-(projectile-mode +1)
-
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(setq projectile-sort-order 'recently-active) ;; Recently active and opened recentf (openned)
-(setq projectile-enable-caching t)
-
-;;Ivy
-(setq enable-recursive-minibuffers t)
-
-;;php mode
-(require 'php-mode)
-(use-package php-mode
-  :init
-  :config
-  (setq php-mode-coding-style 'psr2)
-  (define-key php-mode-map (kbd "M-]") 'ac-php-find-symbol-at-point)
-  (define-key php-mode-map (kbd "M-[") 'ac-php-location-stack-back)
-  )
-
-(require 'lsp-mode)
-(use-package lsp-mode
-:init
-(setq lsp-keymap-prefix "C-c l")
-(setq lsp-enable-symbol-highlighting t)
-:hook (
-       (js-mode . lsp)
-       (typescript-mode . lsp)
-       (lsp-mode . lsp-enable-which-key-integration)
-       (dart-mode . lsp)
-			 (python-mode . lsp)
-			 (php-mode . lsp)
-       )
-:commands lsp)
-(define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-
-;;Keys
-(global-set-key (kbd "C-6") 'indent-region)
-(global-set-key (kbd "C-7") 'indent-buffer)
-(global-set-key (kbd "C-5") 'revert-buffer)
-(global-set-key (kbd "C-9") 'eval-region)
-
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -356,28 +35,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926" "7a8206a977c612016094e6390de94f6af98c3a4adc5b3561f56376730b98af9e" "7a4784fc0c0c853c578132e81a757a0f9b3e675fdd7e56303f3ee1fb8d7ae2a3" "b89a4f5916c29a235d0600ad5a0849b1c50fab16c2c518e1d98f0412367e7f97" "a556e4e6fc62469cd28a57c3b5386807d676a33176659f849fc53fa8763f5955" "63b2616880ed3fc55a75a6c074f20b4623a6df79be4973ec8ed8e0a0a354d570" "78e6be576f4a526d212d5f9a8798e5706990216e9be10174e3f3b015b8662e27" "a3e99dbdaa138996bb0c9c806bc3c3c6b4fd61d6973b946d750b555af8b7555b" default))
- '(ignored-local-variable-values
-   '((eval setq lsp-clients-angular-language-server-command
-		   (let
-			   ((curr-proj-root
-				 (projectile-project-root)))
-			 `("node" ,(concat curr-proj-root "node_modules/@angular/language-server")
-			   "--ngProbeLocations" ,(concat curr-proj-root "node_modules")
-			   "--tsProbeLocations" ,(concat curr-proj-root "node_modules")
-			   "--stdio")))))
+   '("8721f7ee8cd0c2e56d23f757b44c39c249a58c60d33194fe546659dabc69eebd" default))
  '(package-selected-packages
-   '(vue-mode web-mode django-snippets yasnippet-classic-snippets yasnippet-snippets terraform-mode elixir-mode org-bullets xml-format phps-mode clojure-mode better-defaults moe-theme cyberpunk-theme company-prescient prescient rainbow-delimiters rainbow-delimiter helm-projectile helm dracula-theme panda-theme spacemacs-theme prettier-js rjsx-mode ob-sql-mode ob-sql ob-go go-snippet angular-mode go-mode markdown-preview-mode multi-web-mode zen-mode zenburn-theme lsp-dart solidity-mode with-editor company projectile dap-mode lsp-mode magit yaml-mode which-key use-package typescript-mode swift3-mode swift-playground-mode swift-mode sr-speedbar slime powershell ob-powershell monokai-theme lsp-ui elpygen elpy dotenv-mode dockerfile-mode dart-mode csharp-mode company-solidity))
- '(warning-suppress-log-types '((auto-save)))
- '(warning-suppress-types '(((flymake flymake)))))
-;; (custom-set-faces
-;;  '(show-paren-match ((t (:background "red" :foreground "white")))))
-
-
+   '(emojify dap-mode dart-server flycheck lsp-python-ms flymake-python-pyflakes consult orderless vertico smex helm-lsp company-box esup company-lsp yasnippet-snippets yasnippet-classic-snippets yaml-mode xml-format which-key web-mode vue-mode use-package tide terraform-mode tern swift3-mode slime rjsx-mode redis rainbow-delimiters python-mode projectile prettier-js powershell plantuml-mode phps-mode org-bullets ob-sql-mode ob-redis ob-powershell ob-php ob-go multi-web-mode magit lsp-ui lsp-julia lsp-dart json-mode js2-refactor js-doc helm go-snippets go-mode git-timemachine frame-local flymake-php fic-mode erlang elpy elixir-mode dumb-jump dracula-theme dotenv-mode dockerfile-mode django-snippets csharp-mode company-solidity company-quickhelp company-prescient company-php cider better-defaults angular-mode ac-php)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(put 'upcase-region 'disabled nil)
