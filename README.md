@@ -1,6 +1,6 @@
 # emacs-config
 Configuration of emacs for advanced programming:
-- LSP
+- Eglot/Lisp
 - Typescript/Javascript
 - Python
 - PHP
