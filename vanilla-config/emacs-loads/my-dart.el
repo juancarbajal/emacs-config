@@ -1,5 +1,6 @@
 (package-install 'dart-server)
 (package-install 'hover)
+(package-install 'flutter)
 
 (with-eval-after-load 'projectile
   (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
@@ -23,6 +24,12 @@
 (setq gc-cons-threshold (* 100 1024 1024)
       read-process-output-max (* 1024 1024))
 
+(use-package dart
+  :hook (dart-mode . flutter-test-mode))
+(use-package flutter
+  :after dart-mode
+  :bind (:map dart-mode-map
+              ("C-M-x" . #'flutter-run-or-hot-reload)))
 (add-hook 'dart-mode-hook 'lsp)
 
 

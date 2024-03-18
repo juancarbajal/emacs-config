@@ -8,7 +8,10 @@
 (prefer-coding-system 'utf-8-unix)
 (setq-default tab-width 4)
 (setq c-basic-offset 4)
-
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
+(setq inferior-lisp-program "clisp")
 ;; (require 'paren)
 (use-package paren
   :init
@@ -21,6 +24,9 @@
   (set-face-foreground 'show-paren-match "#def")
   (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
   )
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.md$" . markdown-mode))
 
 (use-package elec-pair
   :hook ((prog-mode org-mode) . electric-pair-mode)
@@ -69,12 +75,29 @@
   :init (add-hook 'prog-mode-hook 'fic-mode)
   )
 
+;; (use-package yasnippet
+;;   :ensure t
+;;   :commands yas-minor-mode
+;;   :hook (go-mode . yas-minor-mode))
 
-(use-package yasnippet
-  :ensure t
-  :commands yas-minor-mode
-  :hook (go-mode . yas-minor-mode))
+;; (eshell-git-prompt-use-theme 'powerline)
+(use-package git-grep
+  :commands (git-grep git-grep-repo)
+  ;; :bind (("C-c g g" . git-grep)
+  ;;        ("C-c g r" . git-grep-repo))
+  )
 
+(use-package restclient
+  :ensure t)
+
+(use-package ob-restclient
+  :ensure t)
+
+(use-package ini-mode
+  :ensure t)
+
+;; (use-package mini-frame
+;;   :ensure t)
 
 (provide 'my-programming)
 

@@ -36,6 +36,9 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-tooltip-align-annotations t)
 
+;; Icons in company 
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 
 (use-package company-quickhelp :ensure t :defer 30
   :config

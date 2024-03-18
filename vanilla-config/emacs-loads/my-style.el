@@ -8,9 +8,15 @@
 (setq inhibit-startup-message		t) ;;init with blank file
 (setq global-linum-mode t)
 (setq column-number-mode t)
+(setq mode-line-format nil)
+;; (use-package doom-modeline
+;;   :ensure t
+;;   :hook (after-init . doom-modeline-mode))
 
-(global-display-line-numbers-mode)
+
+;; (global-display-line-numbers-mode)
 (set-frame-font "Hack 12" nil t)
-;; (load-theme 'manoj-dark)
-(load-theme 'tango-dark)
+;; (load-theme 'deeper-blue)
+(load-theme 'wombat)
+;;(load-theme 'leuven)
 (provide 'my-style)

@@ -1,6 +1,6 @@
 (setq ispell-program-name "hunspell")
 (setq ispell-program-name "c:/Program Files (x86)/hunspell/bin/hunspell.exe")
-(setenv "DICTIONARY" "es_ES")
+(setenv "DICTIONARY" "en_US")
 ;; (setq ispell-program-name "c:/Program Files (x86)/Aspell/bin/aspell.exe")
 ;; (require 'ispell)
 ;; (use-package ispell

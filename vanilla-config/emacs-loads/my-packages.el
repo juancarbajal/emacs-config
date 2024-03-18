@@ -8,61 +8,59 @@
 
 (package-initialize)
 
-;; (package-refresh-contents)
-(defvar my-packages '(better-defaults
-                      projectile
-					  helm
-					  rainbow-delimiters
-					  use-package
-					  lsp-mode
-					  lsp-ui
-					  helm-lsp
-					  dap-mode
-					  emojify
-					  ;; flycheck
-					  projectile
-					  company
-					  prescient
-					  company-prescient
-					  company-box
-					  fic-mode
-					  js2-mode
-					  tern
-					  json-mode
-					  js2-refactor
-					  multi-web-mode
-					  yaml-mode
-					  yasnippet-snippets
-					  yasnippet-classic-snippets
-					  dockerfile-mode
-					  dotenv-mode
-					  slime
-					  web-mode
-					  php-mode
-					  company-php
-					  magit
-					  which-key
-					  powershell
-					  org-bullets
-					  ob-powershell
-					  ob-sql-mode
-					  treemacs
-					  lsp-treemacs
-					  python-mode
-					  elpy
-					  solidity-mode
-					  dart-mode
-					  lsp-dart
-					  dracula-theme
-					  go-mode
-					  go-snippets
-					  prettier-js
-					  elixir-mode
-					  ))
+;; (defvar my-packages '(better-defaults
+;;                       projectile
+;; 					  helm
+;;                       helm-projectile
+;; 					  rainbow-delimiters
+;; 					  use-package
+;;  					  emojify
+;; 					  ;; flycheck
+;; 					  projectile
+;;                       yasnippet-classic-snippets
+;;                       yasnippet-snippets
+;; 					  company
+;; 					  prescient  ;;prescient the last commands 
+;; 					  company-prescient
+;; 					  company-box ;; icons in company
+;; 					  fic-mode ;;  add comments TODO BUG FIXME
+;; 					  js2-mode
+;; 					  tern  ;; JS ANalizer
+;; 					  json-mode  
+;; 					  js2-refactor
+;; 					  prettier-js
+;; 					  multi-web-mode
+;; 					  yaml-mode
+;; 					  dockerfile-mode
+;; 					  dotenv-mode
+;; 					  slime ;;lisp mode 
+;; 					  web-mode
+;; 					  ;; php-mode
+;; 					  ;; company-php
+;; 					  magit
+;; 					  which-key
+;; 					  powershell
+;; 					  org-bullets
+;;                       org-download
+;;                       org-cliplink
+;;                       deft
+;; 					  ob-powershell
+;; 					  ob-sql-mode
+;; 					  ;; python-mode
+;; 					  ;; elpy
+;;                       jedi
+;;                       company-jedi
+;; 					  solidity-mode
+;; 					  elixir-mode
+;; 					  dart-mode
+;; 					  go-mode
+;; 					  go-snippets
+;;                       eshell-git-prompt
+;; 					  ))
 
 
-(dolist (p my-packages)
-  (unless (package-installed-p p)
-    (package-install p)))
+;; (dolist (p my-packages)
+;;   (unless (package-installed-p p)
+;;     (package-install p)))
 
 (provide 'my-packages)

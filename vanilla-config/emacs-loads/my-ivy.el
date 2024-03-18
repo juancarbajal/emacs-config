@@ -3,11 +3,11 @@
 			  counsel
 			  swiper
 			  smex
-			  ;; ivy-lsp
 			  ))
 (dolist (p my-ivy-packages)
   (unless (package-installed-p p)
     (package-install p)))
+
 
 (ivy-mode)
 (setq ivy-use-virtual-buffers t)
@@ -16,7 +16,6 @@
 
 (global-set-key "\C-s" 'swiper)
 (global-set-key (kbd "C-c C-r") 'ivy-resume)
-(global-set-key (kbd "<f6>") 'ivy-resume)
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (global-set-key (kbd "<f1> f") 'counsel-describe-function)
@@ -39,7 +38,7 @@
 (global-set-key (kbd "C-c L") 'counsel-git-log)    ;; Search in log
 (global-set-key (kbd "C-c k") 'counsel-rg)         ;; search in project files 
 (global-set-key (kbd "C-c m") 'counsel-linux-app)
-(global-set-key (kbd "C-c n") 'counsel-fzf)
+;; (global-set-key (kbd "C-c n") 'counsel-fzf)
 (global-set-key (kbd "C-x l") 'counsel-locate)
 (global-set-key (kbd "C-c J") 'counsel-file-jump)
 
@@ -49,4 +48,17 @@
 (global-set-key (kbd "C-c t") 'counsel-load-theme)
 (global-set-key (kbd "C-c F") 'counsel-org-file)
 
+;; margin information en minibuffer 
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode) )
+
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (counsel-projectile-mode))
+
+
 (provide 'my-ivy)
+

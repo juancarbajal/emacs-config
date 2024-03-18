@@ -7,7 +7,7 @@
 		 (lsp-mode . lsp-enable-which-key-integration)
 		 (typescript-mode . lsp)
 		 (js2-mode . lsp-deferred)
-		 (go-mode . lsp-deferred)
+		 ;; (go-mode . lsp-deferred)
 		 ;; (dart-mode . lsp)
 		 (python-mode . lsp)
 		 (php-mode . lsp-deferred)
