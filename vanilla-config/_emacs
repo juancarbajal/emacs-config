@@ -1,46 +1,187 @@
-;;; start package
-(setq gc-cons-threshold (* 50 1000 1000))
-(setq gc-cons-percentage 0.6)
-(add-to-list 'load-path "~/emacs-loads")
-(require 'my-settings)
-(require 'my-packages)
-(require 'my-scripts)
-(require 'my-keys)
-(require 'my-style)
-(require 'my-autocomplete)
-;; (require 'my-vertico)
-;; (require 'my-ivy)
-(require 'my-helm)
-;; (require 'my-spell)
-(require 'my-org)
-(require 'my-projectile)
-(require 'my-flycheck)
-(require 'my-lsp)
-(require 'my-dap)
-;; ;; (require 'my-yasnippet)
-(require 'my-programming)
-(require 'my-web)
-(require 'my-js)
-;; (require 'my-pascal)
-(require 'my-dart)
-(require 'my-python)
-;; (require 'my-php)
-(require 'my-go)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(setq gc-cons-threshold (* 2 1000 1000))
+(setq package-enable-at-startup nil)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("8721f7ee8cd0c2e56d23f757b44c39c249a58c60d33194fe546659dabc69eebd" default))
- '(package-selected-packages
-   '(emojify dap-mode dart-server flycheck lsp-python-ms flymake-python-pyflakes consult orderless vertico smex helm-lsp company-box esup company-lsp yasnippet-snippets yasnippet-classic-snippets yaml-mode xml-format which-key web-mode vue-mode use-package tide terraform-mode tern swift3-mode slime rjsx-mode redis rainbow-delimiters python-mode projectile prettier-js powershell plantuml-mode phps-mode org-bullets ob-sql-mode ob-redis ob-powershell ob-php ob-go multi-web-mode magit lsp-ui lsp-julia lsp-dart json-mode js2-refactor js-doc helm go-snippets go-mode git-timemachine frame-local flymake-php fic-mode erlang elpy elixir-mode dumb-jump dracula-theme dotenv-mode dockerfile-mode django-snippets csharp-mode company-solidity company-quickhelp company-prescient company-php cider better-defaults angular-mode ac-php)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(setenv "CVS_RSH" "bash")
+(setq explicit-shell-file-name "/usr/bin/zsh")
+(setq shell-file-name "zsh")
+(setenv "SHELL" shell-file-name)
+(setenv "WikiDataDir" "test-data")
+(setq visible-bell t)
+(setq mouse-drag-copy-region t)
+(setq history-length 1000)
+(setq tramp-auto-save-directory (getenv "TEMP"))
+
+(winner-mode 1)
+(windmove-default-keybindings)
+(savehist-mode 1)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup/"))
+      backup-by-copying			 t	; Don't de-link hard links
+      version-control				 t	; Use version numbers on backups
+      delete-old-versions		 t	; Automatically delete excess backups:
+      kept-new-versions			 6 ; how many of the newest versions to keep
+      kept-old-versions			 2) ; and how many of the old
+(setq auto-save-default nil)
+
+
+(setq bookmark-default-file "~/.emacs.d/saves/bookmarks.bmk" bookmark-save-flag 1)
+;; (setq x-select-enable-clipboard t)
+(setq select-enable-clipboard t)
+(if (eq system-type 'gnu-linux) (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
+(if (eq system-type 'windows-nt) (setq interprogram-paste-function 'x-selection-value))
+
+(setq enable-recursive-minibuffers t)
+
+(show-paren-mode 1)
+(blink-cursor-mode 1)
+(global-visual-line-mode t)
+(fset `yes-or-no-p `y-or-n-p)
+(tool-bar-mode -1)
+(setq find-file-visit-truename t)
+;;(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+(setq inhibit-startup-message		t) ;;init with blank file
+(setq global-linum-mode t)
+(setq column-number-mode t)
+(setq mode-line-format nil)
+(load-theme 'wombat)
+
+(straight-use-package 'ivy)
+(straight-use-package 'counsel)
+(straight-use-package 'swiper)
+(straight-use-package 'smex)
+
+(ivy-mode)
+(setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "(%d/%d) ")
+(setq enable-recursive-minibuffers t)
+(global-set-key "\C-s" 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+(global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+(global-set-key (kbd "<f1> l") 'counsel-find-library)
+(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+(global-set-key (kbd "M-y") 'counsel-yank-pop)
+(global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+(global-set-key (kbd "C-c v") 'ivy-push-view)
+(global-set-key (kbd "C-c V") 'ivy-pop-view)
+
+(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+
+;; Tools
+(global-set-key (kbd "C-c c") 'counsel-compile)
+(global-set-key (kbd "C-c g") 'counsel-git)
+(global-set-key (kbd "C-c j") 'counsel-git-grep)  ;;Search in git files
+(global-set-key (kbd "C-c L") 'counsel-git-log)    ;; Search in log
+(global-set-key (kbd "C-c k") 'counsel-rg)         ;; search in project files 
+(global-set-key (kbd "C-c m") 'counsel-linux-app)
+;; (global-set-key (kbd "C-c n") 'counsel-fzf)
+(global-set-key (kbd "C-x l") 'counsel-locate)
+(global-set-key (kbd "C-c J") 'counsel-file-jump)
+
+(global-set-key (kbd "C-c b") 'counsel-bookmark)
+(global-set-key (kbd "C-c d") 'counsel-descbinds)
+(global-set-key (kbd "C-c o") 'counsel-outline)
+(global-set-key (kbd "C-c t") 'counsel-load-theme)
+(global-set-key (kbd "C-c F") 'counsel-org-file)
+
+(straight-use-package 'company)
+(require 'company)
+(global-company-mode 1) ;; Enable globally
+(setq company-idle-delay 0.1          ;; Show suggestions quickly
+      company-minimum-prefix-length 1 ;; Start completing after 1 char
+      company-selection-wrap-around t ;; Wrap around suggestions
+      company-tooltip-align-annotations t)
+
+(straight-use-package 'marginalia)
+(marginalia-mode)
+
+;;Projectile
+(with-eval-after-load 'projectile
+  (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
+  (add-to-list 'projectile-project-root-files-bottom-up "BUILD"))
+(setq projectile-completion-system 'ivy
+      projectile-sort-order 'recently-active
+      projectile-enable-caching t)
+(setq projectile-project-search-path '("~/Projects/" ))
+      
+(straight-use-package 'yasnippet)
+(straight-use-package 'yasnippet-snippets)
+(yas-global-mode t)
+(add-hook 'prog-mode-hook #'yas-minor-mode)
+
+(straight-use-package 'git-grep)
+
+(straight-use-package 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(setq global-rainbow-delimiters-mode t)
+
+(straight-use-package 'markdown-mode)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+(straight-use-package 'restclient)
+(add-to-list 'auto-mode-alist '("\\.restclient\\'" . restclient-mode))
+
+(straight-use-package 'ini-mode)
+(add-to-list 'auto-mode-alist '("\\.env\\'" . ini-mode))
+
+;;GOLANG
+(straight-use-package 'go-mode)
+(add-hook 'before-save-hook 'gofmt-before-save)
+;;FLUTTER
+(straight-use-package 'dart-server)
+(straight-use-package 'hover)
+(straight-use-package 'flutter)
+(add-hook 'dart-mode (lambda()
+			 (flutter-test-mode)
+			 (setq indent-tabs-mode nil)
+			 (setq dart-mode-on-save t)))
+;;Python
+(straight-use-package 'elpy)
+(elpy-enable)
+;;PHP
+(straight-use-package 'php-mode)
+(defun my-php-load ()
+  (add-hook 'php-mode-hook 'php-enable-default-coding-style
+            'php-mode-hook 'php-enable-psr2-coding-style)
+  (company-mode t)
+  (yas-global-mode 1)
+  (eglot-ensure)
+  )
+(add-hook 'php-mode-hook 'my-php-load)
+;;Terraform
+(straight-use-package 'terraform-mode)
+(add-hook 'terraform-mode 'company-terraform-init)
+(add-to-list 'auto-mode-alist '("\\.tf\\'" . terraform-mode))
+
+
+;; Keys
+(global-set-key (kbd "C-6") 'indent-region)
+(global-set-key (kbd "C-7") 'indent-buffer)
+(global-set-key (kbd "C-5") 'revert-buffer)
+(global-set-key (kbd "C-8") 'deft)
+(global-set-key (kbd "C-9") 'eval-region)
+(global-set-key "\C-c\C-d" "\C-a\C- \C-n\M-w\C-y\C-p")
+(global-set-key "\M-p" 'previous-buffer)
+(global-set-key "\M-n" 'next-buffer)
+;;(global-set-key "\C-x\C-c" 'compile)
+
