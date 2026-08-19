@@ -61,10 +61,24 @@
 (setq mode-line-format nil)
 (load-theme 'wombat)
 
+
 (straight-use-package 'ivy)
 (straight-use-package 'counsel)
 (straight-use-package 'swiper)
 (straight-use-package 'smex)
+(straight-use-package 'hl-todo)
+(straight-use-package 'multiple-cursors)
+
+(straight-use-package 'dashboard)
+(setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
+(setq dashboard-banner-logo-title "Welcome to Emacs")
+(setq dashboard-startup-banner 'logo) ;; 'official, 'logo, or a custom path
+(setq dashboard-items '((recents . 5)
+                       (bookmarks . 5)
+                       (projects . 5)
+                       (agenda . 5)
+                       (registers . 5)))
+(dashboard-setup-startup-hook)
 
 (ivy-mode)
 (setq ivy-use-virtual-buffers t)
@@ -116,6 +130,7 @@
 (marginalia-mode)
 
 ;;Projectile
+(straight-use-package 'projectile)
 (with-eval-after-load 'projectile
   (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
   (add-to-list 'projectile-project-root-files-bottom-up "BUILD"))
@@ -123,7 +138,8 @@
       projectile-sort-order 'recently-active
       projectile-enable-caching t)
 (setq projectile-project-search-path '("~/Projects/" ))
-      
+;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
 (straight-use-package 'yasnippet)
 (straight-use-package 'yasnippet-snippets)
 (yas-global-mode t)
@@ -140,6 +156,7 @@
 
 (straight-use-package 'restclient)
 (add-to-list 'auto-mode-alist '("\\.restclient\\'" . restclient-mode))
+(add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode))
 
 (straight-use-package 'ini-mode)
 (add-to-list 'auto-mode-alist '("\\.env\\'" . ini-mode))
@@ -158,6 +175,10 @@
 ;;Python
 (straight-use-package 'elpy)
 (elpy-enable)
+(setq major-mode-remap-alist '((python-mode . python-ts-mode)))
+(add-hook 'python-mode-hook #'company-mode)
+(add-hook 'python-mode-hook #'flycheck-mode)
+
 ;;PHP
 (straight-use-package 'php-mode)
 (defun my-php-load ()
@@ -165,14 +186,66 @@
             'php-mode-hook 'php-enable-psr2-coding-style)
   (company-mode t)
   (yas-global-mode 1)
-  (eglot-ensure)
   )
 (add-hook 'php-mode-hook 'my-php-load)
+;;Pascal
+(add-to-list 'auto-mode-alist '("\\.pp\\'" . pascal-mode))
+(add-to-list 'auto-mode-alist '("\\.pas\\'" . pascal-mode))
+
+(straight-use-package 'yaml-ts-mode)
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
+
+;;typescript
+;; (straight-use-package 'web-mode)
+;; (straight-use-package
+;;  '(el-patch :type git :host github :repo "orzechowskid/tsx-mode.el"))
+;; (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+(setq treesit-language-source-alist
+      '((tsx "https://github.com/tree-sitter/tree-sitter-typescript" "v0.23.2" "tsx/src")
+        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "v0.23.2" "typescript/src")))
+(dolist (element treesit-language-source-alist)
+  (let ((lang (car element)))
+    (unless (treesit-language-available-p lang)
+      (treesit-install-language-grammar lang))))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx?$" . web-mode))
+(setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+(defun tsx-ts-mode-hook-func ()
+  (lsp-deferred))
+(add-hook 'tsx-ts-mode-hook #'tsx-ts-mode-hook-func)
+;; React with js mode 
+(defun web-mode-init-hook ()
+ "Hooks for Web mode. Adjust indent."
+ (setq web-mode-markup-indent-offset 2) ; Adjust to your preference
+ (setq web-mode-code-indent-offset 2)) ; JavaScript indentation
+(add-hook 'web-mode-hook 'web-mode-init-hook)
+;; Formatter javascript files 
+(straight-use-package 'prettier-js)
+(defun web-mode-init-prettier-hook ()
+ (add-node-modules-path)
+ (prettier-js-mode))
+(add-hook 'web-mode-hook 'web-mode-init-prettier-hook)
+;;HTML Tags expasion
+(straight-use-package 'emmet-mode)
+(add-hook 'web-mode-hook 'emmet-mode)
+(add-hook 'typescript-ts-mode-hook 'emmet-mode)
+(add-hook 'web-mode-hook 'js2-minor-mode)
 ;;Terraform
 (straight-use-package 'terraform-mode)
 (add-hook 'terraform-mode 'company-terraform-init)
 (add-to-list 'auto-mode-alist '("\\.tf\\'" . terraform-mode))
 
+(straight-use-package 'lsp-mode)
+(straight-use-package 'lsp-ui)
+(straight-use-package 'lsp-ivy)
+(straight-use-package 'lsp-pyright)
+(require 'lsp-mode)
+(add-hook 'python-ts-mode #'lsp)
+(add-hook 'python-mode #'lsp)
+(add-hook 'typescript-ts-mode #'lsp)
+(add-hook 'javascript-mode #'lsp)
+(add-hook 'go-mode #'lsp)
 
 ;; Keys
 (global-set-key (kbd "C-6") 'indent-region)
