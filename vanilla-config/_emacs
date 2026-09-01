@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -64,58 +65,106 @@
 (setq org-agenda-files '("~/Documentos"))
 (setq org-agenda-files (directory-files-recursively "~/Documentos" "\\.org$"))
 (straight-use-package 'deft)
-(setq deft-extensions '("md" "txt" "org"))
-(setq deft-default-extension "md")
+(setq deft-extensions '("org" "md" "txt"))
+(setq deft-default-extension "org")
 (setq deft-directory "~/Documentos/notas")
 (setq deft-recursive t)
 (setq def-use-filename-as-title t)
 
 (load-theme 'wombat)
-(straight-use-package 'ivy)
-(straight-use-package 'counsel)
-(straight-use-package 'swiper)
-(straight-use-package 'smex)
+
+(straight-use-package 'vertico)
+(setq vertico-cycle t)
+(setq vertico-resize nil)
+(vertico-mode 1)
+
+(straight-use-package 'orderless)
+(setq completion-styles '(orderless basic))
+
+(setq completion-category-overrides '((file (styles partial-completion))))
+(setq completion-category-defaults nil)
+(setq completion-pcm-leading-wildcard t)
+(setq context-menu-mode t)
+(setq enable-recursive-minibuffers t)
+
+(straight-use-package 'consult)
+;; (global-set-key (kbd "C-s") 'consult-outline)
+(global-set-key (kbd "C-s") 'consult-line)
+(global-set-key (kbd "C-x b") 'consult-buffer)
+(global-set-key (kbd "C-x 4 b") 'consult-buffer-other-window)
+(global-set-key (kbd "C-x 5 b") 'consult-buffer-other-frame)
+(global-set-key (kbd "M-y") 'consult-yank-pop) ;; buffer of copying text
+(global-set-key (kbd "M-g g") 'consult-goto-line)
+(global-set-key (kbd "M-g m") 'consult-mark)
+(global-set-key (kbd "M-g k") 'consult-global-mark)
+(global-set-key (kbd "M-g i") 'consult-imenu)
+(global-set-key (kbd "M-g e") 'consult-compile-error)
+(straight-use-package 'consult-flycheck)
+(global-set-key (kbd "M-g f") 'consult-flycheck)
+(global-set-key (kbd "M-s L") 'consult-line-multi) ;; search multiple files 
+(global-set-key (kbd "M-s g") 'consult-grep)
+(global-set-key (kbd "M-s G") 'consult-git-grep)
+(global-set-key (kbd "M-s r") 'consult-rip-grep)
+(global-set-key (kbd "M-s M-f") 'consult-find)
+(global-set-key (kbd "M-#") 'consult-register-load)
+(global-set-key (kbd "M-'") 'consult-register-store)
+(global-set-key (kbd "C-M-#") 'consult-register)
+
+
+(straight-use-package 'embark)
+(global-set-key (kbd "C-.") 'embark-act)
+(global-set-key (kbd "C-;") 'embark-dwin)
+(global-set-key (kbd "C-h B") 'embark-bindings)
+(global-set-key (kbd "C-c C-c") 'embark-collect)
+(global-set-key (kbd "C-c C-e") 'embark-export)
+(straight-use-package 'embark-consult)
+
+(savehist-mode)
+(recentf-mode 1)
+
 (straight-use-package 'hl-todo)
 (straight-use-package 'multiple-cursors)
 
 
-(ivy-mode)
-(setq ivy-use-virtual-buffers t)
-(setq ivy-count-format "(%d/%d) ")
-(setq enable-recursive-minibuffers t)
-(global-set-key "\C-s" 'swiper)
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-(global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
-(global-set-key (kbd "<f1> l") 'counsel-find-library)
-(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-(global-set-key (kbd "M-y") 'counsel-yank-pop)
-(global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-(global-set-key (kbd "C-c v") 'ivy-push-view)
-(global-set-key (kbd "C-c V") 'ivy-pop-view)
 
-(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+;; (straight-use-package 'ivy)
+;; (straight-use-package 'counsel)
+;; (straight-use-package 'swiper)
+;; (straight-use-package 'smex)
 
-;; Tools
-(global-set-key (kbd "C-c c") 'counsel-compile)
-(global-set-key (kbd "C-c g") 'counsel-git)
-(global-set-key (kbd "C-c j") 'counsel-git-grep)  ;;Search in git files
-(global-set-key (kbd "C-c L") 'counsel-git-log)    ;; Search in log
-(global-set-key (kbd "C-c k") 'counsel-rg)         ;; search in project files 
-(global-set-key (kbd "C-c m") 'counsel-linux-app)
-;; (global-set-key (kbd "C-c n") 'counsel-fzf)
-(global-set-key (kbd "C-x l") 'counsel-locate)
-(global-set-key (kbd "C-c J") 'counsel-file-jump)
-
-(global-set-key (kbd "C-c b") 'counsel-bookmark)
-(global-set-key (kbd "C-c d") 'counsel-descbinds)
-(global-set-key (kbd "C-c o") 'counsel-outline)
-(global-set-key (kbd "C-c t") 'counsel-load-theme)
-(global-set-key (kbd "C-c F") 'counsel-org-file)
+;; (ivy-mode)
+;; (setq ivy-use-virtual-buffers t)
+;; (setq ivy-count-format "(%d/%d) ")
+;; (setq enable-recursive-minibuffers t)
+;; (global-set-key "\C-s" 'swiper)
+;; (global-set-key (kbd "C-c C-r") 'ivy-resume)
+;; (global-set-key (kbd "M-x") 'counsel-M-x)
+;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+;; (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
+;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+;; (global-set-key (kbd "M-y") 'counsel-yank-pop)
+;; (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+;; (global-set-key (kbd "C-c v") 'ivy-push-view)
+;; (global-set-key (kbd "C-c V") 'ivy-pop-view)
+;; (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+;; (global-set-key (kbd "C-c c") 'counsel-compile)
+;; (global-set-key (kbd "C-c g") 'counsel-git)
+;; (global-set-key (kbd "C-c j") 'counsel-git-grep)  ;;Search in git files
+;; (global-set-key (kbd "C-c L") 'counsel-git-log)    ;; Search in log
+;; (global-set-key (kbd "C-c k") 'counsel-rg)         ;; search in project files 
+;; (global-set-key (kbd "C-c m") 'counsel-linux-app)
+;; ;; (global-set-key (kbd "C-c n") 'counsel-fzf)
+;; (global-set-key (kbd "C-x l") 'counsel-locate)
+;; (global-set-key (kbd "C-c J") 'counsel-file-jump)
+;; (global-set-key (kbd "C-c b") 'counsel-bookmark)
+;; (global-set-key (kbd "C-c d") 'counsel-descbinds)
+;; (global-set-key (kbd "C-c o") 'counsel-outline)
+;; (global-set-key (kbd "C-c t") 'counsel-load-theme)
+;; (global-set-key (kbd "C-c F") 'counsel-org-file)
 
 (straight-use-package 'company)
 (require 'company)
@@ -150,6 +199,8 @@
 (yas-global-mode t)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(global-set-key (kbd "C-<tab>") 'yas-expand)
+
 
 (straight-use-package 'git-grep)
 
@@ -171,6 +222,18 @@
 
 (straight-use-package 'ini-mode)
 (add-to-list 'auto-mode-alist '("\\.env\\'" . ini-mode))
+
+(straight-use-package 'lsp-mode)
+(straight-use-package 'lsp-ui)
+(straight-use-package 'lsp-ivy)
+(straight-use-package 'lsp-pyright)
+(require 'lsp-mode)
+(add-hook 'python-ts-mode #'lsp)
+(add-hook 'python-mode #'lsp)
+(add-hook 'typescript-ts-mode #'lsp)
+(add-hook 'javascript-mode #'lsp)
+(add-hook 'go-mode #'lsp)
+
 
 ;;GOLANG
 (straight-use-package 'go-mode)
@@ -203,8 +266,11 @@
 (add-to-list 'auto-mode-alist '("\\.pp\\'" . pascal-mode))
 (add-to-list 'auto-mode-alist '("\\.pas\\'" . pascal-mode))
 
-(straight-use-package 'yaml-ts-mode)
-(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
+(straight-use-package 'dockerfile-mode)
+(add-to-list 'auto-mode-alist '("\\Dockerfile\\'" . yaml-mode))
+
+(straight-use-package 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 
 ;;typescript
 ;; (straight-use-package 'web-mode)
@@ -237,26 +303,19 @@
  (add-node-modules-path)
  (prettier-js-mode))
 (add-hook 'web-mode-hook 'web-mode-init-prettier-hook)
+
 ;;HTML Tags expasion
 (straight-use-package 'emmet-mode)
 (add-hook 'web-mode-hook 'emmet-mode)
 (add-hook 'typescript-ts-mode-hook 'emmet-mode)
 (add-hook 'web-mode-hook 'js2-minor-mode)
+
 ;;Terraform
 (straight-use-package 'terraform-mode)
 (add-hook 'terraform-mode 'company-terraform-init)
 (add-to-list 'auto-mode-alist '("\\.tf\\'" . terraform-mode))
 
-(straight-use-package 'lsp-mode)
-(straight-use-package 'lsp-ui)
-(straight-use-package 'lsp-ivy)
-(straight-use-package 'lsp-pyright)
-(require 'lsp-mode)
-(add-hook 'python-ts-mode #'lsp)
-(add-hook 'python-mode #'lsp)
-(add-hook 'typescript-ts-mode #'lsp)
-(add-hook 'javascript-mode #'lsp)
-(add-hook 'go-mode #'lsp)
+
 
 ;;Dashboard 
 (straight-use-package 'dashboard)
