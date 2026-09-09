@@ -17,6 +17,9 @@
 
 (setq package-enable-at-startup nil)
 
+(straight-use-package 'vterm)
+(global-set-key (kbd "C-x t") (lambda () (interactive) (split-window-below) (other-window 1) (vterm)))
+
 (setenv "CVS_RSH" "bash")
 (setq explicit-shell-file-name "/usr/bin/zsh")
 (setq shell-file-name "zsh")
@@ -64,6 +67,7 @@
 ;; agenda
 (setq org-agenda-files '("~/Documentos"))
 (setq org-agenda-files (directory-files-recursively "~/Documentos" "\\.org$"))
+(straight-use-package 'org-tree-slide)
 (straight-use-package 'deft)
 (setq deft-extensions '("org" "md" "txt"))
 (setq deft-default-extension "org")
@@ -199,6 +203,8 @@
 (yas-global-mode t)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'shell-mode-hook 'display-line-numbers-mode)
+
 (global-set-key (kbd "C-<tab>") 'yas-expand)
 
 
@@ -318,16 +324,16 @@
 
 
 ;;Dashboard 
-(straight-use-package 'dashboard)
-(setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
-(setq dashboard-banner-logo-title "Welcome to Emacs")
-(setq dashboard-startup-banner 'logo) ;; 'official, 'logo, or a custom path
-(setq dashboard-items '((recents . 5)
-                       (bookmarks . 5)
-                       (projects . 5)
-                       (agenda . 5)
-                       (registers . 5)))
-(dashboard-setup-startup-hook)
+;; (straight-use-package 'dashboard)
+;; (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
+;; (setq dashboard-banner-logo-title "Welcome to Emacs")
+;; (setq dashboard-startup-banner 'logo) ;; 'official, 'logo, or a custom path
+;; (setq dashboard-items '((recents . 5)
+;;                        (bookmarks . 5)
+;;                        (projects . 5)
+;;                        (agenda . 5)
+;;                        (registers . 5)))
+;; (dashboard-setup-startup-hook)
 
 
 ;; Keys
