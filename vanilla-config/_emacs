@@ -64,18 +64,77 @@
 (setq column-number-mode t)
 (setq mode-line-format nil)
 
+
+;; spell checker
+;; (straight-use-package 'jinx)
+;; (dolist (hook '(text-mode-hook org-mode-hook markdown-mode-hook))
+;;   (add-hook hook #'jinx-mode))
+;; (keymap-global-set "M-$" #'jinx-correct)
+;; (keymap-global-set "C-M-$" #'jinx-languages)
+(setq ispell-program-name "aspell")
+;; (setq ispell-dictionary "en_US") ;; en_US
+(setq ispell-quietly t)
+(setq ispell-extra-args '("--sug-mode=ultra"))
+(defun flyspell-spanish ()
+  (interactive)
+  (ispell-change-dictionary "castellano")
+  (flyspell-buffer))
+(defun flyspell-english ()
+  (interactive)
+  (ispell-change-dictionary "default")
+  (flyspell-buffer))
+
 ;; agenda
 (setq org-agenda-files '("~/Documentos"))
 (setq org-agenda-files (directory-files-recursively "~/Documentos" "\\.org$"))
 (straight-use-package 'org-tree-slide)
+
 (straight-use-package 'deft)
 (setq deft-extensions '("org" "md" "txt"))
 (setq deft-default-extension "org")
-(setq deft-directory "~/Documentos/notas")
+(setq deft-directory "~/Documentos/docs")
 (setq deft-recursive t)
 (setq def-use-filename-as-title t)
+(global-set-key (kbd "C-c d l") 'deft)
+(global-set-key (kbd "C-c d n") 'deft-new-file)
 
-(load-theme 'wombat)
+(straight-use-package 'org-roam)
+(setq org-roam-directory "~/Documentos/roam-notes")
+(defvar my-notes-map (make-sparse-keymap)
+  "My notes keymap")
+(define-key global-map (kbd "C-c n") my-notes-map)
+(define-key my-notes-map (kbd "l") #'org-roam-buffer-toggle)
+(define-key my-notes-map (kbd "f") #'org-roam-node-find)
+(define-key my-notes-map (kbd "i") #'org-roam-node-insert)
+(define-key my-notes-map (kbd "c") #'org-roam-capture)
+(define-key my-notes-map (kbd "j") #'org-roam-dailies-capture-today)
+(define-key my-notes-map (kbd "t") 'org-roam-tag-add)
+
+(org-roam-db-autosync-mode)
+;(straight-use-package 'org-roam-protocol)
+
+;; (require 'org-roam-protocol)
+;; (straight-use-package 'zetteldeft)
+
+;; (straight-use-package 'org-gnosis)
+;; (setf org-gnosis-dir "~/Documentos/notas"
+;;       org-gnosis-show-tags t)
+;; (defvar my-notes-map (make-sparse-keymap)
+;;   "My notes keymap")
+;; (defvar my-journal-map (make-sparse-keymap)
+;;   "My journal keymap")
+;; (define-key global-map (kbd "C-c n") my-notes-map)
+;; (define-key global-map (kbd "C-c j") my-journal-map)
+;; (define-key my-notes-map (kbd "f") #'org-gnosis-find) 
+;; (define-key my-notes-map (kbd "i") #'org-gnosis-insert)  
+;; (define-key my-notes-map (kbd "t") #'org-gnosis-find-by-tag) 
+;; (define-key my-journal-map (kbd "j") #'org-gnosis-journal)
+;; (define-key my-journal-map (kbd "f") #'org-gnosis-journal-find)
+;; (define-key my-journal-map (kbd "i") #'org-gnosis-journal-insert)
+;; (global-set-key (kbd "C-c C-.") #'org-gnosis-insert-tag)
+;; (global-set-key (kbd "C-c i") 'org-id-get-create)
+
+(load-theme 'tango-dark)
 
 (straight-use-package 'vertico)
 (setq vertico-cycle t)
@@ -199,9 +258,9 @@
 (global-set-key (kbd "C-c p") 'projectile-command-map)
 
 (straight-use-package 'yasnippet)
-(straight-use-package 'yasnippet-snippets)
-(yas-global-mode t)
-(add-hook 'prog-mode-hook #'yas-minor-mode)
+;; (straight-use-package 'yasnippet-snippets)
+;; (yas-global-mode t)
+;; (add-hook 'prog-mode-hook #'yas-minor-mode)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'shell-mode-hook 'display-line-numbers-mode)
 
@@ -341,12 +400,9 @@
 (global-set-key (kbd "C-7") 'indent-buffer)
 (global-set-key (kbd "C-5") 'revert-buffer)
 (global-set-key (kbd "C-9") 'eval-region)
-(global-set-key "\C-c\C-d" "\C-a\C- \C-n\M-w\C-y\C-p")
+;; (global-set-key "\C-c\C-d" "\C-a\C- \C-n\M-w\C-y\C-p")
 (global-set-key "\M-p" 'previous-buffer)
 (global-set-key "\M-n" 'next-buffer)
-
-;;(global-set-key "\C-x\C-c" 'compile)
-(global-set-key (kbd "C-x g l") 'deft)
-(global-set-key (kbd "C-x g n") 'deft-new-file)
+(global-set-key (kbd "C-c C-d") 'duplicate-line)
 
 
